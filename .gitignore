@@ -1,0 +1,16 @@
+/web/laravel/node_modules
+/web/laravel/public/hot
+/web/laravel/public/storage
+/web/laravel/storage/*.key
+/web/laravel/vendor
+/web/laravel/.env
+/web/laravel/.env.backup
+/web/laravel/.phpunit.result.cache
+/web/laravel/docker-compose.override.yml
+/web/laravel/Homestead.json
+/web/laravel/Homestead.yaml
+/web/laravel/npm-debug.log
+/web/laravel/yarn-error.log
+/web/laravel/.idea
+/.vscode
+/database
