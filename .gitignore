@@ -12,3 +12,4 @@
 /web/laravel/yarn-error.log
 /web/laravel/.idea
 /.vscode
+/database/ibdata1
