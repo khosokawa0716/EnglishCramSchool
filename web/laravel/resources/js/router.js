@@ -13,18 +13,18 @@ Vue.use(VueRouter)
 const routes = [
   {
     path: '/',
-    component: Mypage
+    component: Mypage,
   },
   {
     path: '/login',
-    component: Login
-  }
+    component: Login,
+  },
 ]
 
 // VueRouterインスタンスを作成する
 const router = new VueRouter({
   mode: 'history',
-  routes
+  routes,
 })
 
 // VueRouterインスタンスをエクスポートする
