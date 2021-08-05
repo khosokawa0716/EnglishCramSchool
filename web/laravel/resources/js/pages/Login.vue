@@ -56,25 +56,25 @@
 
 <script>
 export default {
-  data () {
+  data() {
     return {
       tab: 1,
       loginForm: {
         name: '',
-        password: ''
+        password: '',
       },
       registerForm: {
         name: '',
         password: '',
-        password_confirmation: ''
+        password_confirmation: '',
       },
       nameRules: [
-        v => !!v || 'なまえはかならず入れてください',
-        v => v.length <= 10 || 'なまえは１０もじ以下で入れてください',
+        (v) => !!v || 'なまえはかならず入れてください',
+        (v) => v.length <= 10 || 'なまえは１０もじ以下で入れてください',
       ],
       passwordRules: [
-        v => !!v || 'パスワードはかならず入れてください',
-        v => v.length <= 10 || 'パスワードは１０もじ以下で入れてください',
+        (v) => !!v || 'パスワードはかならず入れてください',
+        (v) => v.length <= 10 || 'パスワードは１０もじ以下で入れてください',
       ],
     }
   },
@@ -85,12 +85,12 @@ export default {
     selectTab2() {
       this.tab = 2
     },
-    login () {
+    login() {
       console.log(this.loginForm)
     },
-    register () {
+    register() {
       console.log(this.registerForm)
-    }
-  }
+    },
+  },
 }
 </script>
