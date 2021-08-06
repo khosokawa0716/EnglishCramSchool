@@ -5,6 +5,16 @@
     <div>
       <RouterLink to="/login"> Login / Register </RouterLink>
     </div>
-    <v-btn color="primary">Logout</v-btn>
+    <v-btn color="primary" @click="logout">Logout</v-btn>
   </v-app-bar>
 </template>
+<script>
+export default {
+  methods: {
+    async logout() {
+      await this.$store.dispatch('auth/logout')
+      this.$router.push('/login')
+    },
+  },
+}
+</script>

@@ -44,7 +44,7 @@ class RegisterController extends Controller
     {
         return Validator::make($data, [
             'name' => ['required', 'string', 'min:3', 'max:10', 'unique:users'],
-            'password' => ['required', 'min:8', 'max:16', 'confirmed'], // Hankakuは全角文字をはじくために定義したルール app/Rules/Hankaku.php
+            'password' => ['required', 'min:3', 'max:10', 'confirmed'],
         ]);
     }
     /**
