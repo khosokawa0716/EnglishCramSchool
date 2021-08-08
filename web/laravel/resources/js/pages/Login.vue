@@ -6,6 +6,14 @@
     </v-tabs>
     <div v-show="tab === 1">
       <v-form @submit.prevent="login">
+        <div v-if="loginErrors" class="errors">
+          <ul v-if="loginErrors.name">
+            <li v-for="msg in loginErrors.name" :key="msg">{{ msg }}</li>
+          </ul>
+          <ul v-if="loginErrors.password">
+            <li v-for="msg in loginErrors.password" :key="msg">{{ msg }}</li>
+          </ul>
+        </div>
         <v-text-field
           v-model="loginForm.name"
           :rules="nameRules"
@@ -25,6 +33,14 @@
     </div>
     <div v-show="tab === 2">
       <v-form @submit.prevent="register">
+        <div v-if="registerErrors" class="errors">
+          <ul v-if="registerErrors.name">
+            <li v-for="msg in registerErrors.name" :key="msg">{{ msg }}</li>
+          </ul>
+          <ul v-if="registerErrors.password">
+            <li v-for="msg in registerErrors.password" :key="msg">{{ msg }}</li>
+          </ul>
+        </div>
         <v-text-field
           v-model="registerForm.name"
           :rules="nameRules"
@@ -78,6 +94,17 @@ export default {
       ],
     }
   },
+  computed: {
+    apiStatus() {
+      return this.$store.state.auth.apiStatus
+    },
+    loginErrors() {
+      return this.$store.state.auth.loginErrorMessages
+    },
+    registerErrors() {
+      return this.$store.state.auth.registerErrorMessages
+    },
+  },
   methods: {
     selectTab1() {
       this.tab = 1
@@ -87,12 +114,23 @@ export default {
     },
     async login() {
       await this.$store.dispatch('auth/login', this.loginForm)
-      this.$router.push('/')
+      if (this.apiStatus) {
+        this.$router.push('/')
+      }
     },
     async register() {
       await this.$store.dispatch('auth/register', this.registerForm)
-      this.$router.push('/')
+      if (this.apiStatus) {
+        this.$router.push('/')
+      }
     },
+    clearError() {
+      this.$store.commit('auth/setLoginErrorMessages', null)
+      this.$store.commit('auth/setRegisterErrorMessages', null)
+    },
+  },
+  created() {
+    this.clearError()
   },
 }
 </script>
