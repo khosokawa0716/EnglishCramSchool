@@ -26,13 +26,14 @@
         "vue": "^2.6.14",
         "vue-loader": "^15.9.7",
         "vue-router": "^3.5.2",
-        "vue-template-compiler": "^2.6.14"
+        "vue-template-compiler": "^2.6.14",
+        "vuex": "^3.6.2"
     },
     "dependencies": {
         "vuetify": "^2.5.8"
     },
     "prettier": {
-      "singleQuote": true,
-      "semi": false
+        "singleQuote": true,
+        "semi": false
     }
 }
