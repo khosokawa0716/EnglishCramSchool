@@ -13,17 +13,22 @@
 <script>
 export default {
   computed: {
-    isLogin () {
+    isLogin() {
       return this.$store.getters['auth/check']
     },
-    username () {
+    username() {
       return this.$store.getters['auth/username']
-    }
+    },
+    apiStatus() {
+      return this.$store.state.auth.apiStatus
+    },
   },
   methods: {
     async logout() {
       await this.$store.dispatch('auth/logout')
-      this.$router.push('/login')
+      if (this.apiStatus) {
+        this.$router.push('/login')
+      }
     },
   },
 }
