@@ -1986,6 +1986,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _util__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../util */ "./resources/js/util.js");
 
 
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
@@ -2081,6 +2082,27 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
     return {
@@ -2107,16 +2129,9 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         return !!v || '選択肢３つは必ず入れてください';
       }, function (v) {
         return v.length <= 30 || '選択肢は３０もじ以下で入れてください';
-      }]
+      }],
+      registerErrors: null
     };
-  },
-  computed: {
-    apiStatus: function apiStatus() {
-      return this.$store.state.auth.apiStatus;
-    },
-    createWordQuestionErrors: function createWordQuestionErrors() {
-      return this.$store.state.auth.createWordQuestionErrorMessages;
-    }
   },
   methods: {
     register: function register() {
@@ -2128,22 +2143,35 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
           while (1) {
             switch (_context.prev = _context.next) {
               case 0:
-                console.log(_this.createWordQuestionForm); // 入力内容で、WordQuestionController@createを起動
-                // 返却されたオブジェクトをresponseに代入
-
-                _context.next = 3;
+                _context.next = 2;
                 return axios.post('/api/create-word-question/register', _this.createWordQuestionForm);
 
-              case 3:
+              case 2:
                 response = _context.sent;
 
-                // if (response.status !== CREATED) { // その他のエラー
-                //   this.$store.commit('error/setCode', response.status)
-                //   return false
-                // }
+                if (!(response.status === _util__WEBPACK_IMPORTED_MODULE_1__.UNPROCESSABLE_ENTITY)) {
+                  _context.next = 8;
+                  break;
+                }
+
+                _this.registerErrors = response.data.errors;
+                return _context.abrupt("return", false);
+
+              case 8:
+                if (!(response.status !== _util__WEBPACK_IMPORTED_MODULE_1__.CREATED)) {
+                  _context.next = 11;
+                  break;
+                }
+
+                // その他のエラー
+                _this.$store.commit('error/setCode', response.status);
+
+                return _context.abrupt("return", false);
+
+              case 11:
                 _this.$router.push('/');
 
-              case 5:
+              case 12:
               case "end":
                 return _context.stop();
             }
@@ -2167,10 +2195,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       this.createWordQuestionForm.choice2 = '';
       this.createWordQuestionForm.choice3 = '';
       this.createWordQuestionForm.answer = '';
-    } // register() {
-    //   console.log(this.createWordQuestionForm)
-    // }
-
+    }
   },
   created: function created() {
     this.clearError();
@@ -4957,47 +4982,6 @@ var render = function() {
                 }
               },
               [
-                _vm.createWordQuestionErrors
-                  ? _c("div", { staticClass: "errors" }, [
-                      _vm.createWordQuestionErrors.group
-                        ? _c(
-                            "ul",
-                            _vm._l(_vm.createWordQuestionErrors.group, function(
-                              msg
-                            ) {
-                              return _c("li", { key: msg }, [
-                                _vm._v(
-                                  "\n            " +
-                                    _vm._s(msg) +
-                                    "\n          "
-                                )
-                              ])
-                            }),
-                            0
-                          )
-                        : _vm._e(),
-                      _vm._v(" "),
-                      _vm.createWordQuestionErrors.japanese
-                        ? _c(
-                            "ul",
-                            _vm._l(
-                              _vm.createWordQuestionErrors.japanese,
-                              function(msg) {
-                                return _c("li", { key: msg }, [
-                                  _vm._v(
-                                    "\n            " +
-                                      _vm._s(msg) +
-                                      "\n          "
-                                  )
-                                ])
-                              }
-                            ),
-                            0
-                          )
-                        : _vm._e()
-                    ])
-                  : _vm._e(),
-                _vm._v(" "),
                 _c("v-text-field", {
                   attrs: {
                     rules: _vm.groupRules,
@@ -5133,6 +5117,82 @@ var render = function() {
       : _c(
           "div",
           [
+            _vm.registerErrors
+              ? _c("div", { staticClass: "errors" }, [
+                  _vm.registerErrors.group
+                    ? _c(
+                        "ul",
+                        _vm._l(_vm.registerErrors.group, function(msg) {
+                          return _c("li", { key: msg }, [
+                            _vm._v("\n          " + _vm._s(msg) + "\n        ")
+                          ])
+                        }),
+                        0
+                      )
+                    : _vm._e(),
+                  _vm._v(" "),
+                  _vm.registerErrors.japanese
+                    ? _c(
+                        "ul",
+                        _vm._l(_vm.registerErrors.japanese, function(msg) {
+                          return _c("li", { key: msg }, [
+                            _vm._v("\n          " + _vm._s(msg) + "\n        ")
+                          ])
+                        }),
+                        0
+                      )
+                    : _vm._e(),
+                  _vm._v(" "),
+                  _vm.registerErrors.choice1
+                    ? _c(
+                        "ul",
+                        _vm._l(_vm.registerErrors.choice1, function(msg) {
+                          return _c("li", { key: msg }, [
+                            _vm._v("\n          " + _vm._s(msg) + "\n        ")
+                          ])
+                        }),
+                        0
+                      )
+                    : _vm._e(),
+                  _vm._v(" "),
+                  _vm.registerErrors.choice2
+                    ? _c(
+                        "ul",
+                        _vm._l(_vm.registerErrors.choice2, function(msg) {
+                          return _c("li", { key: msg }, [
+                            _vm._v("\n          " + _vm._s(msg) + "\n        ")
+                          ])
+                        }),
+                        0
+                      )
+                    : _vm._e(),
+                  _vm._v(" "),
+                  _vm.registerErrors.choice3
+                    ? _c(
+                        "ul",
+                        _vm._l(_vm.registerErrors.choice3, function(msg) {
+                          return _c("li", { key: msg }, [
+                            _vm._v("\n          " + _vm._s(msg) + "\n        ")
+                          ])
+                        }),
+                        0
+                      )
+                    : _vm._e(),
+                  _vm._v(" "),
+                  _vm.registerErrors.answer
+                    ? _c(
+                        "ul",
+                        _vm._l(_vm.registerErrors.choice1, function(msg) {
+                          return _c("li", { key: msg }, [
+                            _vm._v("\n          " + _vm._s(msg) + "\n        ")
+                          ])
+                        }),
+                        0
+                      )
+                    : _vm._e()
+                ])
+              : _vm._e(),
+            _vm._v(" "),
             _c(
               "v-container",
               [

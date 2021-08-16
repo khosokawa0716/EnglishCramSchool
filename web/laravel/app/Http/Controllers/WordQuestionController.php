@@ -14,14 +14,14 @@ class WordQuestionController extends Controller
      * @return void
      */
     public function create(Request $request, WordQuestion $wordQuestion ) {
-        // $request->validate([
-        //     'title' => 'required|string|min:3|max:60',
-        //     'type' => 'required',
-        //     'minimum_amount' => 'nullable|integer|min:1000|max:10000000',
-        //     'max_amount' => 'nullable|integer|min:1000|max:10000000|gte:minimum_amount',
-        //     'detail' => 'required|string|min:3|max:1000'
-        // ]);
-
+        $request->validate([
+            'group' => 'required|string|min:1|max:20',
+            'japanese' => 'required|string|min:1|max:20',
+            'choice1' => 'required|string|min:1|max:30',
+            'choice2' => 'required|string|min:1|max:30',
+            'choice3' => 'required|string|min:1|max:30',
+            'answer' => 'required|integer|min:1|max:3',
+        ]);
         $wordQuestion->group = $request['group'];
         $wordQuestion->japanese = $request['japanese'];
         $wordQuestion->choice1 = $request['choice1'];
@@ -30,7 +30,5 @@ class WordQuestionController extends Controller
         $wordQuestion->answer = $request['answer'];
 
         $wordQuestion->save();
-
-        // return $wordQuestion;
     }
 }

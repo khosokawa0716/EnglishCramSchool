@@ -2,18 +2,6 @@
   <div>
     <div v-if="page === 1">
       <v-form @submit.prevent="createWordQuestion">
-        <div v-if="createWordQuestionErrors" class="errors">
-          <ul v-if="createWordQuestionErrors.group">
-            <li v-for="msg in createWordQuestionErrors.group" :key="msg">
-              {{ msg }}
-            </li>
-          </ul>
-          <ul v-if="createWordQuestionErrors.japanese">
-            <li v-for="msg in createWordQuestionErrors.japanese" :key="msg">
-              {{ msg }}
-            </li>
-          </ul>
-        </div>
         <v-text-field
           v-model="createWordQuestionForm.group"
           :rules="groupRules"
@@ -65,6 +53,38 @@
       <v-btn type="submit" color="primary" @click="nextPage">次へ</v-btn>
     </div>
     <div v-else>
+      <div v-if="registerErrors" class="errors">
+        <ul v-if="registerErrors.group">
+          <li v-for="msg in registerErrors.group" :key="msg">
+            {{ msg }}
+          </li>
+        </ul>
+        <ul v-if="registerErrors.japanese">
+          <li v-for="msg in registerErrors.japanese" :key="msg">
+            {{ msg }}
+          </li>
+        </ul>
+        <ul v-if="registerErrors.choice1">
+          <li v-for="msg in registerErrors.choice1" :key="msg">
+            {{ msg }}
+          </li>
+        </ul>
+        <ul v-if="registerErrors.choice2">
+          <li v-for="msg in registerErrors.choice2" :key="msg">
+            {{ msg }}
+          </li>
+        </ul>
+        <ul v-if="registerErrors.choice3">
+          <li v-for="msg in registerErrors.choice3" :key="msg">
+            {{ msg }}
+          </li>
+        </ul>
+        <ul v-if="registerErrors.answer">
+          <li v-for="msg in registerErrors.choice1" :key="msg">
+            {{ msg }}
+          </li>
+        </ul>
+      </div>
       <v-container>
         <dl>
           <dt>グループ</dt>
@@ -88,6 +108,8 @@
 </template>
 
 <script>
+import { CREATED, UNPROCESSABLE_ENTITY } from '../util'
+
 export default {
   data() {
     return {
@@ -112,29 +134,25 @@ export default {
         (v) => !!v || '選択肢３つは必ず入れてください',
         (v) => v.length <= 30 || '選択肢は３０もじ以下で入れてください',
       ],
+      registerErrors: null,
     }
-  },
-  computed: {
-    apiStatus() {
-      return this.$store.state.auth.apiStatus
-    },
-    createWordQuestionErrors() {
-      return this.$store.state.auth.createWordQuestionErrorMessages
-    },
   },
   methods: {
     async register() {
-      console.log(this.createWordQuestionForm)
       // 入力内容で、WordQuestionController@createを起動
       // 返却されたオブジェクトをresponseに代入
       const response = await axios.post(
         '/api/create-word-question/register',
         this.createWordQuestionForm
       )
-      // if (response.status !== CREATED) { // その他のエラー
-      //   this.$store.commit('error/setCode', response.status)
-      //   return false
-      // }
+      // バリデーションエラー
+      if (response.status === UNPROCESSABLE_ENTITY) {
+          this.registerErrors = response.data.errors
+          return false
+      } else if (response.status !== CREATED) { // その他のエラー
+          this.$store.commit('error/setCode', response.status)
+          return false
+      }
       this.$router.push('/')
     },
     clearError() {
@@ -154,9 +172,6 @@ export default {
       this.createWordQuestionForm.choice3 = ''
       this.createWordQuestionForm.answer = ''
     },
-    // register() {
-    //   console.log(this.createWordQuestionForm)
-    // }
   },
   created() {
     this.clearError()
