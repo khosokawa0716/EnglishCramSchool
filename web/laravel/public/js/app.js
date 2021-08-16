@@ -1984,9 +1984,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-//
-//
-//
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
+
+
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
 //
 //
 //
@@ -2083,9 +2088,9 @@ __webpack_require__.r(__webpack_exports__);
       createWordQuestionForm: {
         group: '',
         japanese: '',
-        choices1: '',
-        choices2: '',
-        choices3: '',
+        choice1: '',
+        choice2: '',
+        choice3: '',
         answer: 1
       },
       groupRules: [function (v) {
@@ -2114,18 +2119,41 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   methods: {
-    // async createWordQuestion() {
-    //   await this.$store.dispatch(
-    //     'auth/createWordQuestion',
-    //     this.createWordQuestionForm
-    //   )
-    //   if (this.apiStatus) {
-    //     this.$router.push('/')
-    //   }
-    // },
-    // clearError() {
-    //   this.$store.commit('auth/setCreateWordQuestionErrorMessages', null)
-    // },
+    register: function register() {
+      var _this = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee() {
+        var response;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
+          while (1) {
+            switch (_context.prev = _context.next) {
+              case 0:
+                console.log(_this.createWordQuestionForm); // 入力内容で、WordQuestionController@createを起動
+                // 返却されたオブジェクトをresponseに代入
+
+                _context.next = 3;
+                return axios.post('/api/create-word-question/register', _this.createWordQuestionForm);
+
+              case 3:
+                response = _context.sent;
+
+                // if (response.status !== CREATED) { // その他のエラー
+                //   this.$store.commit('error/setCode', response.status)
+                //   return false
+                // }
+                _this.$router.push('/');
+
+              case 5:
+              case "end":
+                return _context.stop();
+            }
+          }
+        }, _callee);
+      }))();
+    },
+    clearError: function clearError() {
+      this.$store.commit('error/setCode', null);
+    },
     nextPage: function nextPage() {
       this.page = 2;
     },
@@ -2135,18 +2163,18 @@ __webpack_require__.r(__webpack_exports__);
     clearForm: function clearForm() {
       this.createWordQuestionForm.group = '';
       this.createWordQuestionForm.japanese = '';
-      this.createWordQuestionForm.choices1 = '';
-      this.createWordQuestionForm.choices2 = '';
-      this.createWordQuestionForm.choices3 = '';
+      this.createWordQuestionForm.choice1 = '';
+      this.createWordQuestionForm.choice2 = '';
+      this.createWordQuestionForm.choice3 = '';
       this.createWordQuestionForm.answer = '';
-    },
-    register: function register() {
-      console.log(this.createWordQuestionForm);
-    }
-  } // created() {
-  //   this.clearError()
-  // },
+    } // register() {
+    //   console.log(this.createWordQuestionForm)
+    // }
 
+  },
+  created: function created() {
+    this.clearError();
+  }
 });
 
 /***/ }),
@@ -5010,11 +5038,11 @@ var render = function() {
                     required: ""
                   },
                   model: {
-                    value: _vm.createWordQuestionForm.choices1,
+                    value: _vm.createWordQuestionForm.choice1,
                     callback: function($$v) {
-                      _vm.$set(_vm.createWordQuestionForm, "choices1", $$v)
+                      _vm.$set(_vm.createWordQuestionForm, "choice1", $$v)
                     },
-                    expression: "createWordQuestionForm.choices1"
+                    expression: "createWordQuestionForm.choice1"
                   }
                 }),
                 _vm._v(" "),
@@ -5026,11 +5054,11 @@ var render = function() {
                     required: ""
                   },
                   model: {
-                    value: _vm.createWordQuestionForm.choices2,
+                    value: _vm.createWordQuestionForm.choice2,
                     callback: function($$v) {
-                      _vm.$set(_vm.createWordQuestionForm, "choices2", $$v)
+                      _vm.$set(_vm.createWordQuestionForm, "choice2", $$v)
                     },
-                    expression: "createWordQuestionForm.choices2"
+                    expression: "createWordQuestionForm.choice2"
                   }
                 }),
                 _vm._v(" "),
@@ -5042,11 +5070,11 @@ var render = function() {
                     required: ""
                   },
                   model: {
-                    value: _vm.createWordQuestionForm.choices3,
+                    value: _vm.createWordQuestionForm.choice3,
                     callback: function($$v) {
-                      _vm.$set(_vm.createWordQuestionForm, "choices3", $$v)
+                      _vm.$set(_vm.createWordQuestionForm, "choice3", $$v)
                     },
-                    expression: "createWordQuestionForm.choices3"
+                    expression: "createWordQuestionForm.choice3"
                   }
                 })
               ],
@@ -5122,19 +5150,19 @@ var render = function() {
                   _c("dt", [_vm._v("選択肢1")]),
                   _vm._v(" "),
                   _c("dd", [
-                    _vm._v(_vm._s(_vm.createWordQuestionForm.choices1))
+                    _vm._v(_vm._s(_vm.createWordQuestionForm.choice1))
                   ]),
                   _vm._v(" "),
                   _c("dt", [_vm._v("選択肢2")]),
                   _vm._v(" "),
                   _c("dd", [
-                    _vm._v(_vm._s(_vm.createWordQuestionForm.choices2))
+                    _vm._v(_vm._s(_vm.createWordQuestionForm.choice2))
                   ]),
                   _vm._v(" "),
                   _c("dt", [_vm._v("選択肢3")]),
                   _vm._v(" "),
                   _c("dd", [
-                    _vm._v(_vm._s(_vm.createWordQuestionForm.choices3))
+                    _vm._v(_vm._s(_vm.createWordQuestionForm.choice3))
                   ]),
                   _vm._v(" "),
                   _c("dt", [_vm._v("正解の選択肢")]),
@@ -5449,7 +5477,15 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c(
     "div",
-    [_c("h1", [_vm._v("Mypage")]), _vm._v(" "), _c("v-btn", [_vm._v("test")])],
+    [
+      _c("h1", [_vm._v("Mypage")]),
+      _vm._v(" "),
+      _c("v-btn", [_vm._v("test")]),
+      _vm._v(" "),
+      _c("router-link", { attrs: { to: "/create-word-question" } }, [
+        _vm._v("問題作成")
+      ])
+    ],
     1
   )
 }
