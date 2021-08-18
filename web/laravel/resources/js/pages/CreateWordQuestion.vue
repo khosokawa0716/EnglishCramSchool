@@ -108,7 +108,7 @@
 </template>
 
 <script>
-import { CREATED, UNPROCESSABLE_ENTITY } from '../util'
+import { OK, UNPROCESSABLE_ENTITY } from '../util'
 
 export default {
   data() {
@@ -147,11 +147,12 @@ export default {
       )
       // バリデーションエラー
       if (response.status === UNPROCESSABLE_ENTITY) {
-          this.registerErrors = response.data.errors
-          return false
-      } else if (response.status !== CREATED) { // その他のエラー
-          this.$store.commit('error/setCode', response.status)
-          return false
+        this.registerErrors = response.data.errors
+        return false
+      } else if (response.status !== OK) {
+        // その他のエラー
+        this.$store.commit('error/setCode', response.status)
+        return false
       }
       this.$router.push('/')
     },
