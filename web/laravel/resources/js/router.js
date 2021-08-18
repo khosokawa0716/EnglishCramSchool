@@ -2,6 +2,7 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Mypage from './pages/Mypage.vue'
 import Login from './pages/Login.vue'
+import CreateWordQuestion from './pages/CreateWordQuestion.vue'
 import SystemError from './pages/errors/System.vue'
 
 import store from './store'
@@ -26,6 +27,10 @@ const routes = [
         next()
       }
     },
+  },
+  {
+    path: '/create-word-question',
+    component: CreateWordQuestion,
   },
   {
     path: '/500',
