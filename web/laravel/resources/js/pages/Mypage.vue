@@ -2,6 +2,17 @@
   <div>
     <h1>Mypage</h1>
     <v-btn>test</v-btn>
-    <router-link to="/create-word-question">問題作成</router-link>
+    <div v-if="isAdmin">
+      <router-link to="/admin">管理者用のマイページへ</router-link>
+    </div>
   </div>
 </template>
+<script>
+export default {
+  computed: {
+    isAdmin() {
+      return this.$store.getters['auth/username'] === 'admin'
+    },
+  },
+}
+</script>
