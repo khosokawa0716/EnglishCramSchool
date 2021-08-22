@@ -32,6 +32,8 @@ Laravel はあまり分からないので、環境構築も含めて下記サイ
 https://www.hypertextcandy.com/vue-laravel-tutorial-introduction/
 
 ## よく使うコマンド
+#### ディレクトリ移動
+`cd /Users/kota/workspace/english-cram-school8`
 #### Dockerをバックグラウンドで起動
 `docker-compose up -d`
 #### Dockerをフォアグラウンドで起動
