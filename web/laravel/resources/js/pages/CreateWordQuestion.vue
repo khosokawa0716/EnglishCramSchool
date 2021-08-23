@@ -1,5 +1,6 @@
 <template>
   <div>
+    <span>問題作成画面</span>
     <div v-if="page === 1">
       <v-form @submit.prevent="createWordQuestion">
         <v-text-field
