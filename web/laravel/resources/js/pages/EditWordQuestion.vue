@@ -1,0 +1,205 @@
+<template>
+  <div>
+    <span>問題編集画面</span>
+    <router-link to="/word-question-list">問題一覧</router-link>
+    <div v-if="page === 1">
+      <v-form @submit.prevent="editWordQuestion">
+        <v-text-field
+          v-model="editWordQuestionForm.group"
+          :rules="groupRules"
+          :counter="20"
+          label="グループ"
+          required
+        ></v-text-field>
+        <v-text-field
+          v-model="editWordQuestionForm.japanese"
+          :rules="japaneseRules"
+          :counter="20"
+          label="日本語"
+          required
+        ></v-text-field>
+        <v-text-field
+          v-model="editWordQuestionForm.choice1"
+          :rules="choicesRules"
+          :counter="30"
+          label="選択肢1"
+          required
+        ></v-text-field>
+        <v-text-field
+          v-model="editWordQuestionForm.choice2"
+          :rules="choicesRules"
+          :counter="30"
+          label="選択肢2"
+          required
+        ></v-text-field>
+        <v-text-field
+          v-model="editWordQuestionForm.choice3"
+          :rules="choicesRules"
+          :counter="30"
+          label="選択肢3"
+          required
+        ></v-text-field>
+      </v-form>
+      <v-container class="px-0" fluid>
+        <h5>正解の選択肢</h5>
+        <v-radio-group v-model="editWordQuestionForm.answer">
+          <v-radio
+            v-for="n in 3"
+            :key="n"
+            :label="`選択肢 ${n}`"
+            :value="n"
+          ></v-radio>
+        </v-radio-group>
+      </v-container>
+      <v-btn type="submit" color="secondary" @click="fetch">編集前に戻す</v-btn>
+      <v-btn type="submit" color="primary" @click="nextPage">次へ</v-btn>
+    </div>
+    <div v-else>
+      <div v-if="editErrors" class="errors">
+        <ul v-if="editErrors.group">
+          <li v-for="msg in editErrors.group" :key="msg">
+            {{ msg }}
+          </li>
+        </ul>
+        <ul v-if="editErrors.japanese">
+          <li v-for="msg in editErrors.japanese" :key="msg">
+            {{ msg }}
+          </li>
+        </ul>
+        <ul v-if="editErrors.choice1">
+          <li v-for="msg in editErrors.choice1" :key="msg">
+            {{ msg }}
+          </li>
+        </ul>
+        <ul v-if="editErrors.choice2">
+          <li v-for="msg in editErrors.choice2" :key="msg">
+            {{ msg }}
+          </li>
+        </ul>
+        <ul v-if="editErrors.choice3">
+          <li v-for="msg in editErrors.choice3" :key="msg">
+            {{ msg }}
+          </li>
+        </ul>
+        <ul v-if="editErrors.answer">
+          <li v-for="msg in editErrors.choice1" :key="msg">
+            {{ msg }}
+          </li>
+        </ul>
+      </div>
+      <v-container>
+        <dl>
+          <dt>グループ</dt>
+          <dd>{{ editWordQuestionForm.group }}</dd>
+          <dt>日本語</dt>
+          <dd>{{ editWordQuestionForm.japanese }}</dd>
+          <dt>選択肢1</dt>
+          <dd>{{ editWordQuestionForm.choice1 }}</dd>
+          <dt>選択肢2</dt>
+          <dd>{{ editWordQuestionForm.choice2 }}</dd>
+          <dt>選択肢3</dt>
+          <dd>{{ editWordQuestionForm.choice3 }}</dd>
+          <dt>正解の選択肢</dt>
+          <dd>{{ editWordQuestionForm.answer }}</dd>
+        </dl>
+        <v-btn type="submit" color="secondary" @click="prePage">戻る</v-btn>
+        <v-btn type="submit" color="primary" @click="update">更新</v-btn>
+      </v-container>
+    </div>
+  </div>
+</template>
+
+<script>
+import { OK, UNPROCESSABLE_ENTITY } from '../util'
+
+export default {
+  data() {
+    return {
+      page: 1,
+      editWordQuestionForm: {
+        id: this.$route.params.id,
+        group: '',
+        japanese: '',
+        choice1: '',
+        choice2: '',
+        choice3: '',
+        answer: 1,
+      },
+      groupRules: [
+        (v) => !!v || 'グループは必ず入れてください',
+        (v) => v.length <= 20 || 'グループは２０もじ以下で入れてください',
+      ],
+      japaneseRules: [
+        (v) => !!v || '日本語は必ず入れてください',
+        (v) => v.length <= 20 || '日本語は２０もじ以下で入れてください',
+      ],
+      choicesRules: [
+        (v) => !!v || '選択肢３つは必ず入れてください',
+        (v) => v.length <= 30 || '選択肢は３０もじ以下で入れてください',
+      ],
+      editErrors: null,
+    }
+  },
+  methods: {
+    // 編集しようとする問題をとってくる
+    async fetch() {
+      // WordQuestionController@editの起動
+      // 返却されたオブジェクトをresponseに代入
+      const response = await axios.get(
+        `/api/edit-word-question/${this.editWordQuestionForm.id}`
+      )
+      // エラーの処理
+      if (response.status !== OK) {
+        this.$store.commit('error/setCode', response.status)
+        return false
+      }
+      // 成功の場合、問題の情報をプロパティに代入
+      this.editWordQuestionForm.group = response.data.group
+      this.editWordQuestionForm.japanese = response.data.japanese
+      this.editWordQuestionForm.choice1 = response.data.choice1
+      this.editWordQuestionForm.choice2 = response.data.choice2
+      this.editWordQuestionForm.choice3 = response.data.choice3
+      this.editWordQuestionForm.answer = response.data.answer
+    },
+    async update() {
+      // 入力内容で、WordQuestionController@updateを起動
+      // 返却されたオブジェクトをresponseに代入
+      const response = await axios.put(
+        `/api/edit-word-question/${this.editWordQuestionForm.id}`,
+        this.editWordQuestionForm
+      )
+      // バリデーションエラー
+      if (response.status === UNPROCESSABLE_ENTITY) {
+        this.editErrors = response.data.errors
+        return false
+      } else if (response.status !== OK) {
+        // その他のエラー
+        this.$store.commit('error/setCode', response.status)
+        return false
+      }
+      this.$router.push('/admin')
+    },
+    clearError() {
+      this.$store.commit('error/setCode', null)
+    },
+    nextPage() {
+      this.page = 2
+    },
+    prePage() {
+      this.page = 1
+    },
+  },
+  created() {
+    this.clearError()
+  },
+  // 初期値を反映させるために、画面遷移直後にfetchProjectメソッドを呼ぶ
+  watch: {
+    $route: {
+      handler: function () {
+        this.fetch()
+      },
+      immediate: true,
+    },
+  },
+}
+</script>

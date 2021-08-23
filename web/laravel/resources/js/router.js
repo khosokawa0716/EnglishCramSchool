@@ -4,6 +4,8 @@ import Mypage from './pages/Mypage.vue'
 import MypageAdmin from './pages/MypageAdmin.vue'
 import Login from './pages/Login.vue'
 import CreateWordQuestion from './pages/CreateWordQuestion.vue'
+import EditWordQuestion from './pages/EditWordQuestion.vue'
+import WordQuestionList from './pages/WordQuestionList.vue'
 import SystemError from './pages/errors/System.vue'
 
 import store from './store'
@@ -52,6 +54,28 @@ const routes = [
   {
     path: '/create-word-question',
     component: CreateWordQuestion,
+    beforeEnter(to, from, next) {
+      if (store.getters['auth/username'] === 'admin') {
+        next()
+      } else {
+        next('/login')
+      }
+    },
+  },
+  {
+    path: '/edit-word-question/:id',
+    component: EditWordQuestion,
+    beforeEnter(to, from, next) {
+      if (store.getters['auth/username'] === 'admin') {
+        next()
+      } else {
+        next('/login')
+      }
+    },
+  },
+  {
+    path: '/word-question-list',
+    component: WordQuestionList,
     beforeEnter(to, from, next) {
       if (store.getters['auth/username'] === 'admin') {
         next()
