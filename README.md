@@ -44,3 +44,8 @@ https://www.hypertextcandy.com/vue-laravel-tutorial-introduction/
 `docker-compose exec english-cram-school_web bash`
 #### 開発用サーバーを立ち上げ
 `php artisan serve --host 0.0.0.0 --port 8081`
+
+## よく使うコード
+#### Laravelのログ出力
+`use Illuminate\Support\Facades\Log;`
+`Log::info('hoge');`
