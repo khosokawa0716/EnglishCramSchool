@@ -2005,27 +2005,92 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
     return {
       questions: [],
+      answers: [],
+      choices: [],
+      judgement: '',
+      end: false,
+      numberOfCorrectAnswers: 0,
+      current: 0,
+      dialog: false,
+      selectedAnswers: [],
+      selectedAnswer: '',
       answer: '',
       id: this.$route.params.id
     };
   },
-  // computed: {
-  //   answer() {
-  //     return this.questions[0].answer
-  //   },
-  // },
+  computed: {
+    lastQuestion: function lastQuestion() {
+      return this.current + 1 === this.questions.length;
+    }
+  },
   methods: {
     // 問題をとってくる
     fetch: function fetch() {
       var _this = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee() {
-        var response;
+        var response, i, choiceArray;
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
           while (1) {
             switch (_context.prev = _context.next) {
@@ -2047,17 +2112,51 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
               case 6:
                 // 成功の場合、問題の情報をプロパティに代入
-                console.log(response.data);
                 _this.questions = response.data;
-                _this.answer = response.data[0].answer;
 
-              case 9:
+                for (i = 0; i < _this.questions.length; i++) {
+                  _this.selectedAnswers.push(1);
+
+                  _this.answers.push(_this.questions[i].answer);
+
+                  choiceArray = [];
+                  choiceArray.push(_this.questions[i].choice1);
+                  choiceArray.push(_this.questions[i].choice2);
+                  choiceArray.push(_this.questions[i].choice3);
+
+                  _this.choices.push(choiceArray);
+                }
+
+              case 8:
               case "end":
                 return _context.stop();
             }
           }
         }, _callee);
       }))();
+    },
+    answerTheQuestion: function answerTheQuestion() {
+      var currentIndex = this.current;
+      var currentSelectedAnswerIndex = this.selectedAnswers[currentIndex] - 1;
+      var currentAnswerIndex = this.answers[currentIndex] - 1;
+      this.selectedAnswer = this.choices[currentIndex][currentSelectedAnswerIndex];
+      this.answer = this.choices[currentIndex][currentAnswerIndex];
+
+      if (currentSelectedAnswerIndex === currentAnswerIndex) {
+        this.judgement = 'せいかいです！';
+        this.numberOfCorrectAnswers++;
+      } else {
+        this.judgement = 'ざんねん、ちがうよ...';
+      }
+    },
+    nextQuestion: function nextQuestion() {
+      this.dialog = false;
+      this.current++;
+    },
+    endQuestion: function endQuestion() {
+      this.dialog = false;
+      this.end = true;
+      this.current++;
     }
   },
   created: function created() {
@@ -5855,18 +5954,234 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", [
-    _c("span", [_vm._v("問題を解く")]),
+    _c("span", [_vm._v(_vm._s(_vm.id) + "のもんだい")]),
     _vm._v(" "),
     _c(
       "div",
       [
-        _c("v-container", [
-          _c("h3", [
-            _vm._v("次の日本語に合う英語をえらんで、「解答」ボタンをおしてね。")
-          ]),
-          _vm._v(" "),
-          _c("p", [_vm._v(_vm._s(_vm.answer))])
-        ])
+        _vm.end
+          ? _c(
+              "v-container",
+              [
+                _c("h3", [_vm._v("もんだいしゅうりょう")]),
+                _vm._v(" "),
+                _c("p", [
+                  _vm._v(
+                    "\n        " +
+                      _vm._s(_vm.questions.length) +
+                      "もんのうち" +
+                      _vm._s(_vm.numberOfCorrectAnswers) +
+                      "もんせいかい！\n      "
+                  )
+                ]),
+                _vm._v(" "),
+                _c(
+                  "p",
+                  {
+                    directives: [
+                      {
+                        name: "show",
+                        rawName: "v-show",
+                        value:
+                          _vm.questions.length === _vm.numberOfCorrectAnswers,
+                        expression:
+                          "questions.length === numberOfCorrectAnswers"
+                      }
+                    ]
+                  },
+                  [_vm._v("\n        ぜんもんせいかい、すごいね！\n      ")]
+                ),
+                _vm._v(" "),
+                _c("RouterLink", { attrs: { to: "/" } }, [
+                  _vm._v("マイページへもどる")
+                ])
+              ],
+              1
+            )
+          : _c(
+              "v-container",
+              [
+                _c("h3", [
+                  _vm._v(
+                    "にほんごに合うえいごをえらんで、「かいとう」ボタンをおしてね。"
+                  )
+                ]),
+                _vm._v(" "),
+                _vm._l(_vm.questions, function(question, index) {
+                  return _c("ul", { key: question.id }, [
+                    _c(
+                      "li",
+                      {
+                        directives: [
+                          {
+                            name: "show",
+                            rawName: "v-show",
+                            value: index === _vm.current,
+                            expression: "index === current"
+                          }
+                        ]
+                      },
+                      [
+                        _c("p", [
+                          _vm._v(
+                            _vm._s(_vm.questions.length) +
+                              "もんのうち" +
+                              _vm._s(index + 1) +
+                              "もんめ"
+                          )
+                        ]),
+                        _vm._v(
+                          "\n          " +
+                            _vm._s(question.japanese) +
+                            "\n          "
+                        ),
+                        _c(
+                          "v-radio-group",
+                          {
+                            model: {
+                              value: _vm.selectedAnswers[index],
+                              callback: function($$v) {
+                                _vm.$set(_vm.selectedAnswers, index, $$v)
+                              },
+                              expression: "selectedAnswers[index]"
+                            }
+                          },
+                          [
+                            _c("v-radio", {
+                              attrs: { label: question.choice1, value: 1 }
+                            }),
+                            _vm._v(" "),
+                            _c("v-radio", {
+                              attrs: { label: question.choice2, value: 2 }
+                            }),
+                            _vm._v(" "),
+                            _c("v-radio", {
+                              attrs: { label: question.choice3, value: 3 }
+                            })
+                          ],
+                          1
+                        )
+                      ],
+                      1
+                    )
+                  ])
+                }),
+                _vm._v(" "),
+                _c(
+                  "v-dialog",
+                  {
+                    attrs: { persistent: "", width: "500" },
+                    scopedSlots: _vm._u([
+                      {
+                        key: "activator",
+                        fn: function(ref) {
+                          var on = ref.on
+                          var attrs = ref.attrs
+                          return [
+                            _c(
+                              "v-btn",
+                              _vm._g(
+                                _vm._b(
+                                  {
+                                    attrs: { color: "primary", dark: "" },
+                                    on: { click: _vm.answerTheQuestion }
+                                  },
+                                  "v-btn",
+                                  attrs,
+                                  false
+                                ),
+                                on
+                              ),
+                              [_vm._v("\n            かいとう\n          ")]
+                            )
+                          ]
+                        }
+                      }
+                    ]),
+                    model: {
+                      value: _vm.dialog,
+                      callback: function($$v) {
+                        _vm.dialog = $$v
+                      },
+                      expression: "dialog"
+                    }
+                  },
+                  [
+                    _vm._v(" "),
+                    _c(
+                      "v-card",
+                      [
+                        _c(
+                          "v-card-title",
+                          { staticClass: "text-h5 grey lighten-2" },
+                          [
+                            _vm._v(
+                              "\n            " +
+                                _vm._s(_vm.judgement) +
+                                "\n          "
+                            )
+                          ]
+                        ),
+                        _vm._v(" "),
+                        _c("v-card-text", [
+                          _c("ul", [
+                            _c("li", [
+                              _vm._v(
+                                "あなたがえらんだかいとう： " +
+                                  _vm._s(_vm.selectedAnswer)
+                              )
+                            ]),
+                            _vm._v(" "),
+                            _c("li", [
+                              _vm._v("せいかい： " + _vm._s(_vm.answer))
+                            ])
+                          ])
+                        ]),
+                        _vm._v(" "),
+                        _c("v-divider"),
+                        _vm._v(" "),
+                        _c(
+                          "v-card-actions",
+                          [
+                            _c("v-spacer"),
+                            _vm._v(" "),
+                            _vm.lastQuestion
+                              ? _c(
+                                  "v-btn",
+                                  {
+                                    attrs: { color: "primary" },
+                                    on: { click: _vm.endQuestion }
+                                  },
+                                  [
+                                    _vm._v(
+                                      "\n              もんだいしゅうりょう\n            "
+                                    )
+                                  ]
+                                )
+                              : _c(
+                                  "v-btn",
+                                  {
+                                    attrs: { color: "primary" },
+                                    on: { click: _vm.nextQuestion }
+                                  },
+                                  [
+                                    _vm._v(
+                                      "\n              つぎのもんだい\n            "
+                                    )
+                                  ]
+                                )
+                          ],
+                          1
+                        )
+                      ],
+                      1
+                    )
+                  ],
+                  1
+                )
+              ],
+              2
+            )
       ],
       1
     )
