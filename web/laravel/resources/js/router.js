@@ -5,6 +5,7 @@ import MypageAdmin from './pages/MypageAdmin.vue'
 import Login from './pages/Login.vue'
 import CreateWordQuestion from './pages/CreateWordQuestion.vue'
 import EditWordQuestion from './pages/EditWordQuestion.vue'
+import AnswerWordQuestion from './pages/AnswerWordQuestion.vue'
 import WordQuestionList from './pages/WordQuestionList.vue'
 import SystemError from './pages/errors/System.vue'
 
@@ -78,6 +79,17 @@ const routes = [
     component: WordQuestionList,
     beforeEnter(to, from, next) {
       if (store.getters['auth/username'] === 'admin') {
+        next()
+      } else {
+        next('/login')
+      }
+    },
+  },
+  {
+    path: '/answer-word-question/:id',
+    component: AnswerWordQuestion,
+    beforeEnter(to, from, next) {
+      if (store.getters['auth/check']) {
         next()
       } else {
         next('/login')

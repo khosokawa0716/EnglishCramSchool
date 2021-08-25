@@ -1973,6 +1973,199 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
 /***/ }),
 
+/***/ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/pages/AnswerWordQuestion.vue?vue&type=script&lang=js&":
+/*!********************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/pages/AnswerWordQuestion.vue?vue&type=script&lang=js& ***!
+  \********************************************************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _util__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../util */ "./resources/js/util.js");
+
+
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  data: function data() {
+    return {
+      questions: [],
+      answers: [],
+      choices: [],
+      judgement: '',
+      end: false,
+      numberOfCorrectAnswers: 0,
+      current: 0,
+      dialog: false,
+      selectedAnswers: [],
+      selectedAnswer: '',
+      answer: '',
+      id: this.$route.params.id
+    };
+  },
+  computed: {
+    lastQuestion: function lastQuestion() {
+      return this.current + 1 === this.questions.length;
+    }
+  },
+  methods: {
+    // 問題をとってくる
+    fetch: function fetch() {
+      var _this = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee() {
+        var response, i, choiceArray;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
+          while (1) {
+            switch (_context.prev = _context.next) {
+              case 0:
+                _context.next = 2;
+                return axios.get("/api/answer-word-question/".concat(_this.id));
+
+              case 2:
+                response = _context.sent;
+
+                if (!(response.status !== _util__WEBPACK_IMPORTED_MODULE_1__.OK)) {
+                  _context.next = 6;
+                  break;
+                }
+
+                _this.$store.commit('error/setCode', response.status);
+
+                return _context.abrupt("return", false);
+
+              case 6:
+                // 成功の場合、問題の情報をプロパティに代入
+                _this.questions = response.data;
+
+                for (i = 0; i < _this.questions.length; i++) {
+                  _this.selectedAnswers.push(1);
+
+                  _this.answers.push(_this.questions[i].answer);
+
+                  choiceArray = [];
+                  choiceArray.push(_this.questions[i].choice1);
+                  choiceArray.push(_this.questions[i].choice2);
+                  choiceArray.push(_this.questions[i].choice3);
+
+                  _this.choices.push(choiceArray);
+                }
+
+              case 8:
+              case "end":
+                return _context.stop();
+            }
+          }
+        }, _callee);
+      }))();
+    },
+    answerTheQuestion: function answerTheQuestion() {
+      var currentIndex = this.current;
+      var currentSelectedAnswerIndex = this.selectedAnswers[currentIndex] - 1;
+      var currentAnswerIndex = this.answers[currentIndex] - 1;
+      this.selectedAnswer = this.choices[currentIndex][currentSelectedAnswerIndex];
+      this.answer = this.choices[currentIndex][currentAnswerIndex];
+
+      if (currentSelectedAnswerIndex === currentAnswerIndex) {
+        this.judgement = 'せいかいです！';
+        this.numberOfCorrectAnswers++;
+      } else {
+        this.judgement = 'ざんねん、ちがうよ...';
+      }
+    },
+    nextQuestion: function nextQuestion() {
+      this.dialog = false;
+      this.current++;
+    },
+    endQuestion: function endQuestion() {
+      this.dialog = false;
+      this.end = true;
+      this.current++;
+    }
+  },
+  created: function created() {
+    this.fetch();
+  }
+});
+
+/***/ }),
+
 /***/ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/pages/CreateWordQuestion.vue?vue&type=script&lang=js&":
 /*!********************************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/pages/CreateWordQuestion.vue?vue&type=script&lang=js& ***!
@@ -2877,16 +3070,18 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm.js");
-/* harmony import */ var vue_router__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! vue-router */ "./node_modules/vue-router/dist/vue-router.esm.js");
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm.js");
+/* harmony import */ var vue_router__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! vue-router */ "./node_modules/vue-router/dist/vue-router.esm.js");
 /* harmony import */ var _pages_Mypage_vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./pages/Mypage.vue */ "./resources/js/pages/Mypage.vue");
 /* harmony import */ var _pages_MypageAdmin_vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./pages/MypageAdmin.vue */ "./resources/js/pages/MypageAdmin.vue");
 /* harmony import */ var _pages_Login_vue__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./pages/Login.vue */ "./resources/js/pages/Login.vue");
 /* harmony import */ var _pages_CreateWordQuestion_vue__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./pages/CreateWordQuestion.vue */ "./resources/js/pages/CreateWordQuestion.vue");
 /* harmony import */ var _pages_EditWordQuestion_vue__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./pages/EditWordQuestion.vue */ "./resources/js/pages/EditWordQuestion.vue");
-/* harmony import */ var _pages_WordQuestionList_vue__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./pages/WordQuestionList.vue */ "./resources/js/pages/WordQuestionList.vue");
-/* harmony import */ var _pages_errors_System_vue__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./pages/errors/System.vue */ "./resources/js/pages/errors/System.vue");
-/* harmony import */ var _store__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./store */ "./resources/js/store/index.js");
+/* harmony import */ var _pages_AnswerWordQuestion_vue__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./pages/AnswerWordQuestion.vue */ "./resources/js/pages/AnswerWordQuestion.vue");
+/* harmony import */ var _pages_WordQuestionList_vue__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./pages/WordQuestionList.vue */ "./resources/js/pages/WordQuestionList.vue");
+/* harmony import */ var _pages_errors_System_vue__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./pages/errors/System.vue */ "./resources/js/pages/errors/System.vue");
+/* harmony import */ var _store__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./store */ "./resources/js/store/index.js");
+
 
 
 
@@ -2899,13 +3094,13 @@ __webpack_require__.r(__webpack_exports__);
  // VueRouterプラグインを使用する
 // これによって<RouterView />コンポーネントなどを使うことができる
 
-vue__WEBPACK_IMPORTED_MODULE_8__.default.use(vue_router__WEBPACK_IMPORTED_MODULE_9__.default); // パスとコンポーネントのマッピング
+vue__WEBPACK_IMPORTED_MODULE_9__.default.use(vue_router__WEBPACK_IMPORTED_MODULE_10__.default); // パスとコンポーネントのマッピング
 
 var routes = [{
   path: '/',
   component: _pages_Mypage_vue__WEBPACK_IMPORTED_MODULE_0__.default,
   beforeEnter: function beforeEnter(to, from, next) {
-    if (_store__WEBPACK_IMPORTED_MODULE_7__.default.getters["auth/check"]) {
+    if (_store__WEBPACK_IMPORTED_MODULE_8__.default.getters["auth/check"]) {
       next();
     } else {
       next('/login');
@@ -2915,7 +3110,7 @@ var routes = [{
   path: '/admin',
   component: _pages_MypageAdmin_vue__WEBPACK_IMPORTED_MODULE_1__.default,
   beforeEnter: function beforeEnter(to, from, next) {
-    if (_store__WEBPACK_IMPORTED_MODULE_7__.default.getters["auth/username"] === 'admin') {
+    if (_store__WEBPACK_IMPORTED_MODULE_8__.default.getters["auth/username"] === 'admin') {
       next();
     } else {
       next('/login');
@@ -2925,9 +3120,9 @@ var routes = [{
   path: '/login',
   component: _pages_Login_vue__WEBPACK_IMPORTED_MODULE_2__.default,
   beforeEnter: function beforeEnter(to, from, next) {
-    if (_store__WEBPACK_IMPORTED_MODULE_7__.default.getters["auth/username"] === 'admin') {
+    if (_store__WEBPACK_IMPORTED_MODULE_8__.default.getters["auth/username"] === 'admin') {
       next('/admin');
-    } else if (_store__WEBPACK_IMPORTED_MODULE_7__.default.getters["auth/check"]) {
+    } else if (_store__WEBPACK_IMPORTED_MODULE_8__.default.getters["auth/check"]) {
       next('/');
     } else {
       next();
@@ -2937,7 +3132,7 @@ var routes = [{
   path: '/create-word-question',
   component: _pages_CreateWordQuestion_vue__WEBPACK_IMPORTED_MODULE_3__.default,
   beforeEnter: function beforeEnter(to, from, next) {
-    if (_store__WEBPACK_IMPORTED_MODULE_7__.default.getters["auth/username"] === 'admin') {
+    if (_store__WEBPACK_IMPORTED_MODULE_8__.default.getters["auth/username"] === 'admin') {
       next();
     } else {
       next('/login');
@@ -2947,7 +3142,7 @@ var routes = [{
   path: '/edit-word-question/:id',
   component: _pages_EditWordQuestion_vue__WEBPACK_IMPORTED_MODULE_4__.default,
   beforeEnter: function beforeEnter(to, from, next) {
-    if (_store__WEBPACK_IMPORTED_MODULE_7__.default.getters["auth/username"] === 'admin') {
+    if (_store__WEBPACK_IMPORTED_MODULE_8__.default.getters["auth/username"] === 'admin') {
       next();
     } else {
       next('/login');
@@ -2955,9 +3150,19 @@ var routes = [{
   }
 }, {
   path: '/word-question-list',
-  component: _pages_WordQuestionList_vue__WEBPACK_IMPORTED_MODULE_5__.default,
+  component: _pages_WordQuestionList_vue__WEBPACK_IMPORTED_MODULE_6__.default,
   beforeEnter: function beforeEnter(to, from, next) {
-    if (_store__WEBPACK_IMPORTED_MODULE_7__.default.getters["auth/username"] === 'admin') {
+    if (_store__WEBPACK_IMPORTED_MODULE_8__.default.getters["auth/username"] === 'admin') {
+      next();
+    } else {
+      next('/login');
+    }
+  }
+}, {
+  path: '/answer-word-question/:id',
+  component: _pages_AnswerWordQuestion_vue__WEBPACK_IMPORTED_MODULE_5__.default,
+  beforeEnter: function beforeEnter(to, from, next) {
+    if (_store__WEBPACK_IMPORTED_MODULE_8__.default.getters["auth/check"]) {
       next();
     } else {
       next('/login');
@@ -2965,10 +3170,10 @@ var routes = [{
   }
 }, {
   path: '/500',
-  component: _pages_errors_System_vue__WEBPACK_IMPORTED_MODULE_6__.default
+  component: _pages_errors_System_vue__WEBPACK_IMPORTED_MODULE_7__.default
 }]; // VueRouterインスタンスを作成する
 
-var router = new vue_router__WEBPACK_IMPORTED_MODULE_9__.default({
+var router = new vue_router__WEBPACK_IMPORTED_MODULE_10__.default({
   mode: 'history',
   routes: routes
 }); // VueRouterインスタンスをエクスポートする
@@ -4987,6 +5192,45 @@ component.options.__file = "resources/js/components/Navbar.vue"
 
 /***/ }),
 
+/***/ "./resources/js/pages/AnswerWordQuestion.vue":
+/*!***************************************************!*\
+  !*** ./resources/js/pages/AnswerWordQuestion.vue ***!
+  \***************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _AnswerWordQuestion_vue_vue_type_template_id_378f8e37___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./AnswerWordQuestion.vue?vue&type=template&id=378f8e37& */ "./resources/js/pages/AnswerWordQuestion.vue?vue&type=template&id=378f8e37&");
+/* harmony import */ var _AnswerWordQuestion_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./AnswerWordQuestion.vue?vue&type=script&lang=js& */ "./resources/js/pages/AnswerWordQuestion.vue?vue&type=script&lang=js&");
+/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! !../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+;
+var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__.default)(
+  _AnswerWordQuestion_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__.default,
+  _AnswerWordQuestion_vue_vue_type_template_id_378f8e37___WEBPACK_IMPORTED_MODULE_0__.render,
+  _AnswerWordQuestion_vue_vue_type_template_id_378f8e37___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns,
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/pages/AnswerWordQuestion.vue"
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (component.exports);
+
+/***/ }),
+
 /***/ "./resources/js/pages/CreateWordQuestion.vue":
 /*!***************************************************!*\
   !*** ./resources/js/pages/CreateWordQuestion.vue ***!
@@ -5288,6 +5532,22 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./resources/js/pages/AnswerWordQuestion.vue?vue&type=script&lang=js&":
+/*!****************************************************************************!*\
+  !*** ./resources/js/pages/AnswerWordQuestion.vue?vue&type=script&lang=js& ***!
+  \****************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_0_rules_0_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_AnswerWordQuestion_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./AnswerWordQuestion.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/pages/AnswerWordQuestion.vue?vue&type=script&lang=js&");
+ /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_0_rules_0_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_AnswerWordQuestion_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__.default); 
+
+/***/ }),
+
 /***/ "./resources/js/pages/CreateWordQuestion.vue?vue&type=script&lang=js&":
 /*!****************************************************************************!*\
   !*** ./resources/js/pages/CreateWordQuestion.vue?vue&type=script&lang=js& ***!
@@ -5415,6 +5675,23 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "staticRenderFns": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Navbar_vue_vue_type_template_id_6dde423b___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns)
 /* harmony export */ });
 /* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Navbar_vue_vue_type_template_id_6dde423b___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./Navbar.vue?vue&type=template&id=6dde423b& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/Navbar.vue?vue&type=template&id=6dde423b&");
+
+
+/***/ }),
+
+/***/ "./resources/js/pages/AnswerWordQuestion.vue?vue&type=template&id=378f8e37&":
+/*!**********************************************************************************!*\
+  !*** ./resources/js/pages/AnswerWordQuestion.vue?vue&type=template&id=378f8e37& ***!
+  \**********************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "render": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_AnswerWordQuestion_vue_vue_type_template_id_378f8e37___WEBPACK_IMPORTED_MODULE_0__.render),
+/* harmony export */   "staticRenderFns": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_AnswerWordQuestion_vue_vue_type_template_id_378f8e37___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns)
+/* harmony export */ });
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_AnswerWordQuestion_vue_vue_type_template_id_378f8e37___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./AnswerWordQuestion.vue?vue&type=template&id=378f8e37& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/pages/AnswerWordQuestion.vue?vue&type=template&id=378f8e37&");
 
 
 /***/ }),
@@ -5652,6 +5929,263 @@ var render = function() {
     ],
     1
   )
+}
+var staticRenderFns = []
+render._withStripped = true
+
+
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/pages/AnswerWordQuestion.vue?vue&type=template&id=378f8e37&":
+/*!*************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/pages/AnswerWordQuestion.vue?vue&type=template&id=378f8e37& ***!
+  \*************************************************************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "render": () => (/* binding */ render),
+/* harmony export */   "staticRenderFns": () => (/* binding */ staticRenderFns)
+/* harmony export */ });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", [
+    _c("span", [_vm._v(_vm._s(_vm.id) + "のもんだい")]),
+    _vm._v(" "),
+    _c(
+      "div",
+      [
+        _vm.end
+          ? _c(
+              "v-container",
+              [
+                _c("h3", [_vm._v("もんだいしゅうりょう")]),
+                _vm._v(" "),
+                _c("p", [
+                  _vm._v(
+                    "\n        " +
+                      _vm._s(_vm.questions.length) +
+                      "もんのうち" +
+                      _vm._s(_vm.numberOfCorrectAnswers) +
+                      "もんせいかい！\n      "
+                  )
+                ]),
+                _vm._v(" "),
+                _c(
+                  "p",
+                  {
+                    directives: [
+                      {
+                        name: "show",
+                        rawName: "v-show",
+                        value:
+                          _vm.questions.length === _vm.numberOfCorrectAnswers,
+                        expression:
+                          "questions.length === numberOfCorrectAnswers"
+                      }
+                    ]
+                  },
+                  [_vm._v("\n        ぜんもんせいかい、すごいね！\n      ")]
+                ),
+                _vm._v(" "),
+                _c("RouterLink", { attrs: { to: "/" } }, [
+                  _vm._v("マイページへもどる")
+                ])
+              ],
+              1
+            )
+          : _c(
+              "v-container",
+              [
+                _c("h3", [
+                  _vm._v(
+                    "にほんごに合うえいごをえらんで、「かいとう」ボタンをおしてね。"
+                  )
+                ]),
+                _vm._v(" "),
+                _vm._l(_vm.questions, function(question, index) {
+                  return _c("ul", { key: question.id }, [
+                    _c(
+                      "li",
+                      {
+                        directives: [
+                          {
+                            name: "show",
+                            rawName: "v-show",
+                            value: index === _vm.current,
+                            expression: "index === current"
+                          }
+                        ]
+                      },
+                      [
+                        _c("p", [
+                          _vm._v(
+                            _vm._s(_vm.questions.length) +
+                              "もんのうち" +
+                              _vm._s(index + 1) +
+                              "もんめ"
+                          )
+                        ]),
+                        _vm._v(
+                          "\n          " +
+                            _vm._s(question.japanese) +
+                            "\n          "
+                        ),
+                        _c(
+                          "v-radio-group",
+                          {
+                            model: {
+                              value: _vm.selectedAnswers[index],
+                              callback: function($$v) {
+                                _vm.$set(_vm.selectedAnswers, index, $$v)
+                              },
+                              expression: "selectedAnswers[index]"
+                            }
+                          },
+                          [
+                            _c("v-radio", {
+                              attrs: { label: question.choice1, value: 1 }
+                            }),
+                            _vm._v(" "),
+                            _c("v-radio", {
+                              attrs: { label: question.choice2, value: 2 }
+                            }),
+                            _vm._v(" "),
+                            _c("v-radio", {
+                              attrs: { label: question.choice3, value: 3 }
+                            })
+                          ],
+                          1
+                        )
+                      ],
+                      1
+                    )
+                  ])
+                }),
+                _vm._v(" "),
+                _c(
+                  "v-dialog",
+                  {
+                    attrs: { persistent: "", width: "500" },
+                    scopedSlots: _vm._u([
+                      {
+                        key: "activator",
+                        fn: function(ref) {
+                          var on = ref.on
+                          var attrs = ref.attrs
+                          return [
+                            _c(
+                              "v-btn",
+                              _vm._g(
+                                _vm._b(
+                                  {
+                                    attrs: { color: "primary", dark: "" },
+                                    on: { click: _vm.answerTheQuestion }
+                                  },
+                                  "v-btn",
+                                  attrs,
+                                  false
+                                ),
+                                on
+                              ),
+                              [_vm._v("\n            かいとう\n          ")]
+                            )
+                          ]
+                        }
+                      }
+                    ]),
+                    model: {
+                      value: _vm.dialog,
+                      callback: function($$v) {
+                        _vm.dialog = $$v
+                      },
+                      expression: "dialog"
+                    }
+                  },
+                  [
+                    _vm._v(" "),
+                    _c(
+                      "v-card",
+                      [
+                        _c(
+                          "v-card-title",
+                          { staticClass: "text-h5 grey lighten-2" },
+                          [
+                            _vm._v(
+                              "\n            " +
+                                _vm._s(_vm.judgement) +
+                                "\n          "
+                            )
+                          ]
+                        ),
+                        _vm._v(" "),
+                        _c("v-card-text", [
+                          _c("ul", [
+                            _c("li", [
+                              _vm._v(
+                                "あなたがえらんだかいとう： " +
+                                  _vm._s(_vm.selectedAnswer)
+                              )
+                            ]),
+                            _vm._v(" "),
+                            _c("li", [
+                              _vm._v("せいかい： " + _vm._s(_vm.answer))
+                            ])
+                          ])
+                        ]),
+                        _vm._v(" "),
+                        _c("v-divider"),
+                        _vm._v(" "),
+                        _c(
+                          "v-card-actions",
+                          [
+                            _c("v-spacer"),
+                            _vm._v(" "),
+                            _vm.lastQuestion
+                              ? _c(
+                                  "v-btn",
+                                  {
+                                    attrs: { color: "primary" },
+                                    on: { click: _vm.endQuestion }
+                                  },
+                                  [
+                                    _vm._v(
+                                      "\n              もんだいしゅうりょう\n            "
+                                    )
+                                  ]
+                                )
+                              : _c(
+                                  "v-btn",
+                                  {
+                                    attrs: { color: "primary" },
+                                    on: { click: _vm.nextQuestion }
+                                  },
+                                  [
+                                    _vm._v(
+                                      "\n              つぎのもんだい\n            "
+                                    )
+                                  ]
+                                )
+                          ],
+                          1
+                        )
+                      ],
+                      1
+                    )
+                  ],
+                  1
+                )
+              ],
+              2
+            )
+      ],
+      1
+    )
+  ])
 }
 var staticRenderFns = []
 render._withStripped = true

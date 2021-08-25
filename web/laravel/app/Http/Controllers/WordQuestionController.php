@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use App\Models\WordQuestion;
 
 class WordQuestionController extends Controller
@@ -49,6 +50,19 @@ class WordQuestionController extends Controller
             // URLのID部分に数値でない入力でリクエストがあった場合にも、エラーコード404を返却する
             return abort(404);
         }
+    }
+
+    /**
+     * グループに合った問題を取得する
+     * @param string $group
+     * @return Array
+     */
+    public function readgroup($group)
+    {
+        $wordQuestion = WordQuestion::where('group', $group)->get();
+        // 検索結果がない場合には、エラーコード404を返却する
+        if ($wordQuestion === null) { return abort(404); }
+        return $wordQuestion;
     }
 
     /**
