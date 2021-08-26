@@ -3,6 +3,7 @@ import VueRouter from 'vue-router'
 import Mypage from './pages/Mypage.vue'
 import MypageAdmin from './pages/MypageAdmin.vue'
 import Login from './pages/Login.vue'
+import CreateGroup from './pages/CreateGroup.vue'
 import CreateWordQuestion from './pages/CreateWordQuestion.vue'
 import EditWordQuestion from './pages/EditWordQuestion.vue'
 import AnswerWordQuestion from './pages/AnswerWordQuestion.vue'
@@ -49,6 +50,17 @@ const routes = [
         next('/')
       } else {
         next()
+      }
+    },
+  },
+  {
+    path: '/create-group',
+    component: CreateGroup,
+    beforeEnter(to, from, next) {
+      if (store.getters['auth/username'] === 'admin') {
+        next()
+      } else {
+        next('/login')
       }
     },
   },
