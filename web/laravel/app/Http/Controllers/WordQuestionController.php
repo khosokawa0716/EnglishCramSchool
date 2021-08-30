@@ -15,15 +15,16 @@ class WordQuestionController extends Controller
      * @return void
      */
     public function create(Request $request, WordQuestion $wordQuestion ) {
+        // Log::info($request);
         $request->validate([
-            'group' => 'required|string|min:1|max:20',
+            'group_id' => 'required',
             'japanese' => 'required|string|min:1|max:20',
             'choice1' => 'required|string|min:1|max:30',
             'choice2' => 'required|string|min:1|max:30',
             'choice3' => 'required|string|min:1|max:30',
             'answer' => 'required|integer|min:1|max:3',
         ]);
-        $wordQuestion->group = $request['group'];
+        $wordQuestion->group_id = $request['group_id'];
         $wordQuestion->japanese = $request['japanese'];
         $wordQuestion->choice1 = $request['choice1'];
         $wordQuestion->choice2 = $request['choice2'];

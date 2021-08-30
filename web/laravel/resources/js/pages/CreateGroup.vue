@@ -8,7 +8,7 @@
         </li>
       </ul>
     </div>
-    <v-form @submit.prevent="createWordQuestion">
+    <v-form @submit.prevent="register">
       <v-text-field
         v-model="group"
         :rules="groupRules"
@@ -20,8 +20,8 @@
     <v-btn type="submit" color="primary" @click="register">グループ登録</v-btn>
     <div>
       <span>登録されたグループ</span>
-      <ul>
-        <li>hoge</li>
+      <ul v-for="group in groups" :key="group.index">
+        <li>{{ group }}</li>
       </ul>
     </div>
   </div>
@@ -34,6 +34,7 @@ export default {
   data() {
     return {
       group: '',
+      groups: [],
       groupRules: [
         (v) => !!v || 'グループは必ず入れてください',
         (v) => v.length <= 20 || 'グループは２０もじ以下で入れてください',
@@ -50,9 +51,18 @@ export default {
         return false
       }
       // 成功の場合、問題の情報をプロパティに代入
-      console.log(response.data)
+      this.groups = []
+      for (let i = 0; i < response.data.length; i++) {
+        this.groups.push(response.data[i].name)
+      }
     },
     async register() {
+      // 重複していた場合は、入力値をクリアする
+      if (this.groups.includes(this.group)) {
+        this.group = ''
+        return false
+      }
+
       // 入力内容で、GroupController@createを起動
       // 返却されたオブジェクトをresponseに代入
       const response = await axios.post('/api/create-group/register', {

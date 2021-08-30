@@ -2220,6 +2220,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
   data: function data() {
     return {
       group: '',
+      groups: [],
       groupRules: [function (v) {
         return !!v || 'グループは必ず入れてください';
       }, function (v) {
@@ -2233,7 +2234,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       var _this = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee() {
-        var response;
+        var response, i;
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
           while (1) {
             switch (_context.prev = _context.next) {
@@ -2255,9 +2256,13 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
               case 6:
                 // 成功の場合、問題の情報をプロパティに代入
-                console.log(response.data);
+                _this.groups = [];
 
-              case 7:
+                for (i = 0; i < response.data.length; i++) {
+                  _this.groups.push(response.data[i].name);
+                }
+
+              case 8:
               case "end":
                 return _context.stop();
             }
@@ -2274,25 +2279,34 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
           while (1) {
             switch (_context2.prev = _context2.next) {
               case 0:
-                _context2.next = 2;
+                if (!_this2.groups.includes(_this2.group)) {
+                  _context2.next = 3;
+                  break;
+                }
+
+                _this2.group = '';
+                return _context2.abrupt("return", false);
+
+              case 3:
+                _context2.next = 5;
                 return axios.post('/api/create-group/register', {
                   name: _this2.group
                 });
 
-              case 2:
+              case 5:
                 response = _context2.sent;
 
                 if (!(response.status === _util__WEBPACK_IMPORTED_MODULE_1__.UNPROCESSABLE_ENTITY)) {
-                  _context2.next = 8;
+                  _context2.next = 11;
                   break;
                 }
 
                 _this2.registerErrors = response.data.errors;
                 return _context2.abrupt("return", false);
 
-              case 8:
+              case 11:
                 if (!(response.status !== _util__WEBPACK_IMPORTED_MODULE_1__.OK)) {
-                  _context2.next = 11;
+                  _context2.next = 14;
                   break;
                 }
 
@@ -2301,12 +2315,12 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
                 return _context2.abrupt("return", false);
 
-              case 11:
+              case 14:
                 console.log('登録できました');
 
                 _this2.fetch();
 
-              case 13:
+              case 16:
               case "end":
                 return _context2.stop();
             }
@@ -2454,15 +2468,16 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
-//
-//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
     return {
       page: 1,
+      groupsId: [],
       createWordQuestionForm: {
         group: '',
+        group_id: this.groupId,
+        groupsName: [],
         japanese: '',
         choice1: '',
         choice2: '',
@@ -2487,9 +2502,21 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       registerErrors: null
     };
   },
-  methods: {
-    register: function register() {
+  computed: {
+    groupId: function groupId() {
       var _this = this;
+
+      var isGroup = function isGroup(group) {
+        return group === _this.createWordQuestionForm.group;
+      };
+
+      var index = this.createWordQuestionForm.groupsName.findIndex(isGroup);
+      return this.groupsId[index];
+    }
+  },
+  methods: {
+    fetchGroups: function fetchGroups() {
+      var _this2 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee() {
         var response;
@@ -2498,39 +2525,84 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
             switch (_context.prev = _context.next) {
               case 0:
                 _context.next = 2;
-                return axios.post('/api/create-word-question/register', _this.createWordQuestionForm);
+                return axios.get("/api/create-group");
 
               case 2:
                 response = _context.sent;
 
-                if (!(response.status === _util__WEBPACK_IMPORTED_MODULE_1__.UNPROCESSABLE_ENTITY)) {
-                  _context.next = 8;
+                if (!(response.status !== _util__WEBPACK_IMPORTED_MODULE_1__.OK)) {
+                  _context.next = 6;
                   break;
                 }
 
-                _this.registerErrors = response.data.errors;
+                _this2.$store.commit('error/setCode', response.status);
+
                 return _context.abrupt("return", false);
+
+              case 6:
+                // 成功の場合、問題の情報をプロパティに代入
+                _this2.createWordQuestionForm.groupsName = response.data.map(function (obj) {
+                  return obj.name;
+                });
+                _this2.groupsId = response.data.map(function (obj) {
+                  return obj.id;
+                });
 
               case 8:
-                if (!(response.status !== _util__WEBPACK_IMPORTED_MODULE_1__.OK)) {
-                  _context.next = 11;
-                  break;
-                }
-
-                // その他のエラー
-                _this.$store.commit('error/setCode', response.status);
-
-                return _context.abrupt("return", false);
-
-              case 11:
-                _this.$router.push('/');
-
-              case 12:
               case "end":
                 return _context.stop();
             }
           }
         }, _callee);
+      }))();
+    },
+    register: function register() {
+      var _this3 = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee2() {
+        var response;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee2$(_context2) {
+          while (1) {
+            switch (_context2.prev = _context2.next) {
+              case 0:
+                _context2.next = 2;
+                return axios.post('/api/create-word-question/register', _this3.createWordQuestionForm, {
+                  params: {
+                    group_id: _this3.groupId
+                  }
+                });
+
+              case 2:
+                response = _context2.sent;
+
+                if (!(response.status === _util__WEBPACK_IMPORTED_MODULE_1__.UNPROCESSABLE_ENTITY)) {
+                  _context2.next = 8;
+                  break;
+                }
+
+                _this3.registerErrors = response.data.errors;
+                return _context2.abrupt("return", false);
+
+              case 8:
+                if (!(response.status !== _util__WEBPACK_IMPORTED_MODULE_1__.OK)) {
+                  _context2.next = 11;
+                  break;
+                }
+
+                // その他のエラー
+                _this3.$store.commit('error/setCode', response.status);
+
+                return _context2.abrupt("return", false);
+
+              case 11:
+                _this3.$router.push('/');
+
+              case 12:
+              case "end":
+                return _context2.stop();
+            }
+          }
+        }, _callee2);
       }))();
     },
     clearError: function clearError() {
@@ -2553,6 +2625,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
   },
   created: function created() {
     this.clearError();
+    this.fetchGroups();
   }
 });
 
@@ -6481,7 +6554,7 @@ var render = function() {
           on: {
             submit: function($event) {
               $event.preventDefault()
-              return _vm.createWordQuestion.apply(null, arguments)
+              return _vm.register.apply(null, arguments)
             }
           }
         },
@@ -6514,23 +6587,24 @@ var render = function() {
         [_vm._v("グループ登録")]
       ),
       _vm._v(" "),
-      _vm._m(0)
+      _c(
+        "div",
+        [
+          _c("span", [_vm._v("登録されたグループ")]),
+          _vm._v(" "),
+          _vm._l(_vm.groups, function(group) {
+            return _c("ul", { key: group.index }, [
+              _c("li", [_vm._v(_vm._s(group))])
+            ])
+          })
+        ],
+        2
+      )
     ],
     1
   )
 }
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", [
-      _c("span", [_vm._v("登録されたグループ")]),
-      _vm._v(" "),
-      _c("ul", [_c("li", [_vm._v("hoge")])])
-    ])
-  }
-]
+var staticRenderFns = []
 render._withStripped = true
 
 
@@ -6554,7 +6628,7 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", [
-    _c("span", [_vm._v("問題作成画面")]),
+    _c("span", [_vm._v("問題作成画面" + _vm._s(_vm.groupId))]),
     _vm._v(" "),
     _vm.page === 1
       ? _c(
@@ -6571,12 +6645,10 @@ var render = function() {
                 }
               },
               [
-                _c("v-text-field", {
+                _c("v-select", {
                   attrs: {
-                    rules: _vm.groupRules,
-                    counter: 20,
-                    label: "グループ",
-                    required: ""
+                    items: _vm.createWordQuestionForm.groupsName,
+                    label: "グループ"
                   },
                   model: {
                     value: _vm.createWordQuestionForm.group,
