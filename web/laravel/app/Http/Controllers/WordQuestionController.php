@@ -55,12 +55,12 @@ class WordQuestionController extends Controller
 
     /**
      * グループに合った問題を取得する
-     * @param string $group
+     * @param string $group_id
      * @return Array
      */
-    public function readgroup($group)
+    public function readgroup($group_id)
     {
-        $wordQuestion = WordQuestion::where('group', $group)->get();
+        $wordQuestion = WordQuestion::where('group_id', $group_id)->get();
         // 検索結果がない場合には、エラーコード404を返却する
         if ($wordQuestion === null) { return abort(404); }
         return $wordQuestion;

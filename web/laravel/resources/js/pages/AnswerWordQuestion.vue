@@ -1,6 +1,6 @@
 <template>
   <div>
-    <span>{{ id }}のもんだい</span>
+    <span>{{ findGroupName(id) }}のもんだい</span>
     <div>
       <v-container v-if="end">
         <h3>もんだいしゅうりょう</h3>
@@ -84,6 +84,8 @@ export default {
       selectedAnswer: '',
       answer: '',
       id: this.$route.params.id,
+      groupsId: [],
+      groupsName: [],
     }
   },
   computed: {
@@ -95,12 +97,15 @@ export default {
     // 問題をとってくる
     async fetch() {
       const response = await axios.get(`/api/answer-word-question/${this.id}`)
+      const responseGroup = await axios.get(`/api/create-group`)
       // エラーの処理
       if (response.status !== OK) {
         this.$store.commit('error/setCode', response.status)
         return false
       }
       // 成功の場合、問題の情報をプロパティに代入
+      this.groupsId = responseGroup.data.map((obj) => obj.id) // responseGroupからidだけを取り出して新しい配列にする
+      this.groupsName = responseGroup.data.map((obj) => obj.name) // responseGroupからnameだけを取り出して新しい配列にする
       this.questions = response.data
       for (let i = 0; i < this.questions.length; i++) {
         this.selectedAnswers.push(1)
@@ -134,6 +139,11 @@ export default {
       this.dialog = false
       this.end = true
       this.current++
+    },
+    findGroupName(val) {
+      const isGroupId = (group_id) => group_id === Number(val) // 配列をチェックする関数。引数がvalと正しいかどうか
+      const index = this.groupsId.findIndex(isGroupId) // groupのidの配列からgroup_idと等しい数値のindexを探す
+      return this.groupsName[index]
     },
   },
   created() {
