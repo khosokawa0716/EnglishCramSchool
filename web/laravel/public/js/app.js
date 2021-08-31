@@ -2476,7 +2476,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       groupsId: [],
       createWordQuestionForm: {
         group: '',
-        group_id: this.groupId,
+        // group_id: this.groupId,
         groupsName: [],
         japanese: '',
         choice1: '',
@@ -2484,11 +2484,6 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         choice3: '',
         answer: 1
       },
-      groupRules: [function (v) {
-        return !!v || 'グループは必ず入れてください';
-      }, function (v) {
-        return v.length <= 20 || 'グループは２０もじ以下で入れてください';
-      }],
       japaneseRules: [function (v) {
         return !!v || '日本語は必ず入れてください';
       }, function (v) {
@@ -2510,6 +2505,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         return group === _this.createWordQuestionForm.group;
       };
 
+      console.log(isGroup);
       var index = this.createWordQuestionForm.groupsName.findIndex(isGroup);
       return this.groupsId[index];
     }
@@ -2760,27 +2756,23 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
-//
-//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
     return {
       page: 1,
+      groupsId: [],
       editWordQuestionForm: {
         id: this.$route.params.id,
         group: '',
+        group_id: 0,
+        groupsName: [],
         japanese: '',
         choice1: '',
         choice2: '',
         choice3: '',
         answer: 1
       },
-      groupRules: [function (v) {
-        return !!v || 'グループは必ず入れてください';
-      }, function (v) {
-        return v.length <= 20 || 'グループは２０もじ以下で入れてください';
-      }],
       japaneseRules: [function (v) {
         return !!v || '日本語は必ず入れてください';
       }, function (v) {
@@ -2800,7 +2792,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       var _this = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee() {
-        var response;
+        var response, responseGroup, isGroupId, index;
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
           while (1) {
             switch (_context.prev = _context.next) {
@@ -2810,9 +2802,14 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
               case 2:
                 response = _context.sent;
+                _context.next = 5;
+                return axios.get("/api/create-group");
+
+              case 5:
+                responseGroup = _context.sent;
 
                 if (!(response.status !== _util__WEBPACK_IMPORTED_MODULE_1__.OK)) {
-                  _context.next = 6;
+                  _context.next = 9;
                   break;
                 }
 
@@ -2820,16 +2817,31 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
                 return _context.abrupt("return", false);
 
-              case 6:
+              case 9:
                 // 成功の場合、問題の情報をプロパティに代入
-                _this.editWordQuestionForm.group = response.data.group;
+                _this.editWordQuestionForm.group_id = response.data.group_id;
                 _this.editWordQuestionForm.japanese = response.data.japanese;
                 _this.editWordQuestionForm.choice1 = response.data.choice1;
                 _this.editWordQuestionForm.choice2 = response.data.choice2;
                 _this.editWordQuestionForm.choice3 = response.data.choice3;
                 _this.editWordQuestionForm.answer = response.data.answer;
+                _this.editWordQuestionForm.groupsName = responseGroup.data.map(function (obj) {
+                  return obj.name;
+                });
+                _this.groupsId = responseGroup.data.map(function (obj) {
+                  return obj.id;
+                }); // responseGroupからidだけを取り出して新しい配列にする
 
-              case 12:
+                isGroupId = function isGroupId(group_id) {
+                  return group_id === _this.editWordQuestionForm.group_id;
+                }; // 配列をチェックする関数。引数がthis.editWordQuestionForm.group_idと正しいかどうか
+
+
+                index = _this.groupsId.findIndex(isGroupId); // groupのidの配列からgroup_idと等しい数値のindexを探す
+
+                _this.editWordQuestionForm.group = _this.editWordQuestionForm.groupsName[index];
+
+              case 20:
               case "end":
                 return _context.stop();
             }
@@ -2841,28 +2853,43 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       var _this2 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee2() {
-        var response;
+        var isGroupName, groupNameIndex, selected_group_id, response;
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee2$(_context2) {
           while (1) {
             switch (_context2.prev = _context2.next) {
               case 0:
-                _context2.next = 2;
-                return axios.put("/api/edit-word-question/".concat(_this2.editWordQuestionForm.id), _this2.editWordQuestionForm);
+                isGroupName = function isGroupName(group_name) {
+                  return group_name === _this2.editWordQuestionForm.group;
+                }; // 配列をチェックする関数。引数がthis.editWordQuestionForm.groupsNameと正しいかどうか
+                // 選択されたgroupからselected_group_idを求める
 
-              case 2:
+
+                groupNameIndex = _this2.editWordQuestionForm.groupsName.findIndex(isGroupName); // groupのidの配列からgroup_idと等しい数値のindexを探す
+
+                selected_group_id = _this2.groupsId[groupNameIndex]; // 入力内容で、WordQuestionController@updateを起動
+                // 返却されたオブジェクトをresponseに代入
+
+                _context2.next = 5;
+                return axios.put("/api/edit-word-question/".concat(_this2.editWordQuestionForm.id), _this2.editWordQuestionForm, {
+                  params: {
+                    selected_group_id: selected_group_id
+                  }
+                });
+
+              case 5:
                 response = _context2.sent;
 
                 if (!(response.status === _util__WEBPACK_IMPORTED_MODULE_1__.UNPROCESSABLE_ENTITY)) {
-                  _context2.next = 8;
+                  _context2.next = 11;
                   break;
                 }
 
                 _this2.editErrors = response.data.errors;
                 return _context2.abrupt("return", false);
 
-              case 8:
+              case 11:
                 if (!(response.status !== _util__WEBPACK_IMPORTED_MODULE_1__.OK)) {
-                  _context2.next = 11;
+                  _context2.next = 14;
                   break;
                 }
 
@@ -2871,10 +2898,10 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
                 return _context2.abrupt("return", false);
 
-              case 11:
+              case 14:
                 _this2.$router.push('/admin');
 
-              case 12:
+              case 15:
               case "end":
                 return _context2.stop();
             }
@@ -6963,12 +6990,10 @@ var render = function() {
                   }
                 },
                 [
-                  _c("v-text-field", {
+                  _c("v-select", {
                     attrs: {
-                      rules: _vm.groupRules,
-                      counter: 20,
-                      label: "グループ",
-                      required: ""
+                      items: _vm.editWordQuestionForm.groupsName,
+                      label: "グループ"
                     },
                     model: {
                       value: _vm.editWordQuestionForm.group,

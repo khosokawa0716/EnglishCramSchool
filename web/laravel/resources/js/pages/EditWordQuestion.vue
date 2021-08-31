@@ -4,13 +4,11 @@
     <router-link to="/word-question-list">問題一覧</router-link>
     <div v-if="page === 1">
       <v-form @submit.prevent="editWordQuestion">
-        <v-text-field
+        <v-select
           v-model="editWordQuestionForm.group"
-          :rules="groupRules"
-          :counter="20"
+          :items="editWordQuestionForm.groupsName"
           label="グループ"
-          required
-        ></v-text-field>
+        ></v-select>
         <v-text-field
           v-model="editWordQuestionForm.japanese"
           :rules="japaneseRules"
@@ -116,19 +114,18 @@ export default {
   data() {
     return {
       page: 1,
+      groupsId: [],
       editWordQuestionForm: {
         id: this.$route.params.id,
         group: '',
+        group_id: 0,
+        groupsName: [],
         japanese: '',
         choice1: '',
         choice2: '',
         choice3: '',
         answer: 1,
       },
-      groupRules: [
-        (v) => !!v || 'グループは必ず入れてください',
-        (v) => v.length <= 20 || 'グループは２０もじ以下で入れてください',
-      ],
       japaneseRules: [
         (v) => !!v || '日本語は必ず入れてください',
         (v) => v.length <= 20 || '日本語は２０もじ以下で入れてください',
@@ -148,25 +145,48 @@ export default {
       const response = await axios.get(
         `/api/edit-word-question/${this.editWordQuestionForm.id}`
       )
+      const responseGroup = await axios.get(`/api/create-group`)
+
       // エラーの処理
       if (response.status !== OK) {
         this.$store.commit('error/setCode', response.status)
         return false
       }
       // 成功の場合、問題の情報をプロパティに代入
-      this.editWordQuestionForm.group = response.data.group
+      this.editWordQuestionForm.group_id = response.data.group_id
       this.editWordQuestionForm.japanese = response.data.japanese
       this.editWordQuestionForm.choice1 = response.data.choice1
       this.editWordQuestionForm.choice2 = response.data.choice2
       this.editWordQuestionForm.choice3 = response.data.choice3
       this.editWordQuestionForm.answer = response.data.answer
+      this.editWordQuestionForm.groupsName = responseGroup.data.map(
+        (obj) => obj.name
+      )
+      this.groupsId = responseGroup.data.map((obj) => obj.id) // responseGroupからidだけを取り出して新しい配列にする
+      const isGroupId = (group_id) =>
+        group_id === this.editWordQuestionForm.group_id // 配列をチェックする関数。引数がthis.editWordQuestionForm.group_idと正しいかどうか
+      const index = this.groupsId.findIndex(isGroupId) // groupのidの配列からgroup_idと等しい数値のindexを探す
+      this.editWordQuestionForm.group =
+        this.editWordQuestionForm.groupsName[index]
     },
     async update() {
+      const isGroupName = (group_name) =>
+        group_name === this.editWordQuestionForm.group // 配列をチェックする関数。引数がthis.editWordQuestionForm.groupsNameと正しいかどうか
+      // 選択されたgroupからselected_group_idを求める
+      const groupNameIndex =
+        this.editWordQuestionForm.groupsName.findIndex(isGroupName) // groupのidの配列からgroup_idと等しい数値のindexを探す
+      const selected_group_id = this.groupsId[groupNameIndex]
+
       // 入力内容で、WordQuestionController@updateを起動
       // 返却されたオブジェクトをresponseに代入
       const response = await axios.put(
         `/api/edit-word-question/${this.editWordQuestionForm.id}`,
-        this.editWordQuestionForm
+        this.editWordQuestionForm,
+        {
+          params: {
+            selected_group_id: selected_group_id,
+          },
+        }
       )
       // バリデーションエラー
       if (response.status === UNPROCESSABLE_ENTITY) {

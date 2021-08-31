@@ -116,7 +116,7 @@ export default {
       groupsId: [],
       createWordQuestionForm: {
         group: '',
-        group_id: this.groupId,
+        // group_id: this.groupId,
         groupsName: [],
         japanese: '',
         choice1: '',
@@ -124,10 +124,6 @@ export default {
         choice3: '',
         answer: 1,
       },
-      groupRules: [
-        (v) => !!v || 'グループは必ず入れてください',
-        (v) => v.length <= 20 || 'グループは２０もじ以下で入れてください',
-      ],
       japaneseRules: [
         (v) => !!v || '日本語は必ず入れてください',
         (v) => v.length <= 20 || '日本語は２０もじ以下で入れてください',
@@ -142,6 +138,7 @@ export default {
   computed: {
     groupId() {
       const isGroup = (group) => group === this.createWordQuestionForm.group
+      console.log(isGroup)
       const index = this.createWordQuestionForm.groupsName.findIndex(isGroup)
       return this.groupsId[index]
     },

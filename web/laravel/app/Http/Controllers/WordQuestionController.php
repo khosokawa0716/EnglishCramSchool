@@ -88,6 +88,7 @@ class WordQuestionController extends Controller
      */
     public function update (Request $request, $id)
     {
+        // Log::info($request);
         // 1.この操作をする権限があるかどうかを確認する
         if (ctype_digit($id)) {
             $wordQuestion = WordQuestion::find($id);
@@ -99,7 +100,7 @@ class WordQuestionController extends Controller
         }
         // 1.バリデーションチェック
         $request->validate([
-            'group' => 'required|string|min:1|max:20',
+            'selected_group_id' => 'required',
             'japanese' => 'required|string|min:1|max:20',
             'choice1' => 'required|string|min:1|max:30',
             'choice2' => 'required|string|min:1|max:30',
@@ -108,7 +109,7 @@ class WordQuestionController extends Controller
         ]);
 
         // 2.変更がある項目のみセットする
-        if ( $wordQuestion->group !== $request['group'] ) { $wordQuestion->group = $request['group']; }
+        if ( $wordQuestion->group_id !== $request['selected_group_id'] ) { $wordQuestion->group_id = $request['selected_group_id']; }
         if ( $wordQuestion->japanese !== $request['japanese'] ) { $wordQuestion->japanese = $request['japanese']; }
         if ( $wordQuestion->choice1 !== $request['choice1']) { $wordQuestion->choice1 = $request['choice1']; }
         if ( $wordQuestion->choice2 !== $request['choice2']) { $wordQuestion->choice2 = $request['choice2']; }
