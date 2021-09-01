@@ -2240,6 +2240,9 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
@@ -2385,6 +2388,9 @@ function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 
+//
+//
+//
 //
 //
 //
@@ -2672,6 +2678,9 @@ function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 
+//
+//
+//
 //
 //
 //
@@ -3165,6 +3174,15 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _util__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../util */ "./resources/js/util.js");
+
+
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
 //
 //
 //
@@ -3174,11 +3192,77 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  data: function data() {
+    return {
+      groups: []
+    };
+  },
   computed: {
     isAdmin: function isAdmin() {
       return this.$store.getters['auth/username'] === 'admin';
+    },
+    username: function username() {
+      return this.$store.getters['auth/username'];
     }
+  },
+  methods: {
+    fetch: function fetch() {
+      var _this = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee() {
+        var response, i, group;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
+          while (1) {
+            switch (_context.prev = _context.next) {
+              case 0:
+                _context.next = 2;
+                return axios.get("/api/create-group");
+
+              case 2:
+                response = _context.sent;
+
+                if (!(response.status !== _util__WEBPACK_IMPORTED_MODULE_1__.OK)) {
+                  _context.next = 6;
+                  break;
+                }
+
+                _this.$store.commit('error/setCode', response.status);
+
+                return _context.abrupt("return", false);
+
+              case 6:
+                // 成功の場合、問題の情報をプロパティに代入
+                _this.groups = [];
+
+                for (i = 0; i < response.data.length; i++) {
+                  group = new Object();
+                  group.id = response.data[i].id;
+                  group.name = response.data[i].name;
+
+                  _this.groups.push(group);
+                }
+
+              case 8:
+              case "end":
+                return _context.stop();
+            }
+          }
+        }, _callee);
+      }))();
+    }
+  },
+  created: function created() {
+    this.fetch();
   }
 });
 
@@ -3204,6 +3288,9 @@ function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 
+//
+//
+//
 //
 //
 //
@@ -6386,7 +6473,7 @@ var render = function() {
                 ),
                 _vm._v(" "),
                 _c("RouterLink", { attrs: { to: "/" } }, [
-                  _vm._v("マイページへもどる")
+                  _vm._v("マイページもどる")
                 ])
               ],
               1
@@ -6606,7 +6693,19 @@ var render = function() {
   return _c(
     "div",
     [
-      _c("span", [_vm._v("グループ作成画面")]),
+      _c("h3", [_vm._v("グループ作成")]),
+      _vm._v(" "),
+      _c("ul", [
+        _c(
+          "li",
+          [
+            _c("router-link", { attrs: { to: "/admin" } }, [
+              _vm._v("管理者のマイページ")
+            ])
+          ],
+          1
+        )
+      ]),
       _vm._v(" "),
       _vm.registerErrors
         ? _c("div", { staticClass: "errors" }, [
@@ -6704,7 +6803,19 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", [
-    _c("span", [_vm._v("問題作成画面" + _vm._s(_vm.groupId))]),
+    _c("h3", [_vm._v("問題作成")]),
+    _vm._v(" "),
+    _c("ul", [
+      _c(
+        "li",
+        [
+          _c("router-link", { attrs: { to: "/admin" } }, [
+            _vm._v("管理者のマイページ")
+          ])
+        ],
+        1
+      )
+    ]),
     _vm._v(" "),
     _vm.page === 1
       ? _c(
@@ -7015,314 +7126,308 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c(
-    "div",
-    [
-      _c("span", [_vm._v("問題編集画面")]),
+  return _c("div", [
+    _c("h3", [_vm._v("問題作成")]),
+    _vm._v(" "),
+    _c("ul", [
+      _c(
+        "li",
+        [
+          _c("router-link", { attrs: { to: "/admin" } }, [
+            _vm._v("管理者のマイページ")
+          ])
+        ],
+        1
+      ),
       _vm._v(" "),
-      _c("router-link", { attrs: { to: "/word-question-list" } }, [
-        _vm._v("問題一覧")
-      ]),
-      _vm._v(" "),
-      _vm.page === 1
-        ? _c(
-            "div",
-            [
-              _c(
-                "v-form",
-                {
-                  on: {
-                    submit: function($event) {
-                      $event.preventDefault()
-                      return _vm.editWordQuestion.apply(null, arguments)
-                    }
+      _c(
+        "li",
+        [
+          _c("router-link", { attrs: { to: "/word-question-list" } }, [
+            _vm._v("問題一覧")
+          ])
+        ],
+        1
+      )
+    ]),
+    _vm._v(" "),
+    _vm.page === 1
+      ? _c(
+          "div",
+          [
+            _c(
+              "v-form",
+              {
+                on: {
+                  submit: function($event) {
+                    $event.preventDefault()
+                    return _vm.editWordQuestion.apply(null, arguments)
                   }
-                },
-                [
-                  _c("v-select", {
-                    attrs: {
-                      items: _vm.editWordQuestionForm.groupsName,
-                      label: "グループ"
+                }
+              },
+              [
+                _c("v-select", {
+                  attrs: {
+                    items: _vm.editWordQuestionForm.groupsName,
+                    label: "グループ"
+                  },
+                  model: {
+                    value: _vm.editWordQuestionForm.group,
+                    callback: function($$v) {
+                      _vm.$set(_vm.editWordQuestionForm, "group", $$v)
                     },
+                    expression: "editWordQuestionForm.group"
+                  }
+                }),
+                _vm._v(" "),
+                _c("v-text-field", {
+                  attrs: {
+                    rules: _vm.japaneseRules,
+                    counter: 20,
+                    label: "日本語",
+                    required: ""
+                  },
+                  model: {
+                    value: _vm.editWordQuestionForm.japanese,
+                    callback: function($$v) {
+                      _vm.$set(_vm.editWordQuestionForm, "japanese", $$v)
+                    },
+                    expression: "editWordQuestionForm.japanese"
+                  }
+                }),
+                _vm._v(" "),
+                _c("v-text-field", {
+                  attrs: {
+                    rules: _vm.choicesRules,
+                    counter: 30,
+                    label: "選択肢1",
+                    required: ""
+                  },
+                  model: {
+                    value: _vm.editWordQuestionForm.choice1,
+                    callback: function($$v) {
+                      _vm.$set(_vm.editWordQuestionForm, "choice1", $$v)
+                    },
+                    expression: "editWordQuestionForm.choice1"
+                  }
+                }),
+                _vm._v(" "),
+                _c("v-text-field", {
+                  attrs: {
+                    rules: _vm.choicesRules,
+                    counter: 30,
+                    label: "選択肢2",
+                    required: ""
+                  },
+                  model: {
+                    value: _vm.editWordQuestionForm.choice2,
+                    callback: function($$v) {
+                      _vm.$set(_vm.editWordQuestionForm, "choice2", $$v)
+                    },
+                    expression: "editWordQuestionForm.choice2"
+                  }
+                }),
+                _vm._v(" "),
+                _c("v-text-field", {
+                  attrs: {
+                    rules: _vm.choicesRules,
+                    counter: 30,
+                    label: "選択肢3",
+                    required: ""
+                  },
+                  model: {
+                    value: _vm.editWordQuestionForm.choice3,
+                    callback: function($$v) {
+                      _vm.$set(_vm.editWordQuestionForm, "choice3", $$v)
+                    },
+                    expression: "editWordQuestionForm.choice3"
+                  }
+                })
+              ],
+              1
+            ),
+            _vm._v(" "),
+            _c(
+              "v-container",
+              { staticClass: "px-0", attrs: { fluid: "" } },
+              [
+                _c("h5", [_vm._v("正解の選択肢")]),
+                _vm._v(" "),
+                _c(
+                  "v-radio-group",
+                  {
                     model: {
-                      value: _vm.editWordQuestionForm.group,
+                      value: _vm.editWordQuestionForm.answer,
                       callback: function($$v) {
-                        _vm.$set(_vm.editWordQuestionForm, "group", $$v)
+                        _vm.$set(_vm.editWordQuestionForm, "answer", $$v)
                       },
-                      expression: "editWordQuestionForm.group"
+                      expression: "editWordQuestionForm.answer"
                     }
+                  },
+                  _vm._l(3, function(n) {
+                    return _c("v-radio", {
+                      key: n,
+                      attrs: { label: "選択肢 " + n, value: n }
+                    })
                   }),
+                  1
+                )
+              ],
+              1
+            ),
+            _vm._v(" "),
+            _c(
+              "v-btn",
+              {
+                attrs: { type: "submit", color: "secondary" },
+                on: { click: _vm.fetch }
+              },
+              [_vm._v("編集前に戻す")]
+            ),
+            _vm._v(" "),
+            _c(
+              "v-btn",
+              {
+                attrs: { type: "submit", color: "primary" },
+                on: { click: _vm.nextPage }
+              },
+              [_vm._v("次へ")]
+            )
+          ],
+          1
+        )
+      : _c(
+          "div",
+          [
+            _vm.editErrors
+              ? _c("div", { staticClass: "errors" }, [
+                  _vm.editErrors.group
+                    ? _c(
+                        "ul",
+                        _vm._l(_vm.editErrors.group, function(msg) {
+                          return _c("li", { key: msg }, [
+                            _vm._v("\n          " + _vm._s(msg) + "\n        ")
+                          ])
+                        }),
+                        0
+                      )
+                    : _vm._e(),
                   _vm._v(" "),
-                  _c("v-text-field", {
-                    attrs: {
-                      rules: _vm.japaneseRules,
-                      counter: 20,
-                      label: "日本語",
-                      required: ""
-                    },
-                    model: {
-                      value: _vm.editWordQuestionForm.japanese,
-                      callback: function($$v) {
-                        _vm.$set(_vm.editWordQuestionForm, "japanese", $$v)
-                      },
-                      expression: "editWordQuestionForm.japanese"
-                    }
-                  }),
+                  _vm.editErrors.japanese
+                    ? _c(
+                        "ul",
+                        _vm._l(_vm.editErrors.japanese, function(msg) {
+                          return _c("li", { key: msg }, [
+                            _vm._v("\n          " + _vm._s(msg) + "\n        ")
+                          ])
+                        }),
+                        0
+                      )
+                    : _vm._e(),
                   _vm._v(" "),
-                  _c("v-text-field", {
-                    attrs: {
-                      rules: _vm.choicesRules,
-                      counter: 30,
-                      label: "選択肢1",
-                      required: ""
-                    },
-                    model: {
-                      value: _vm.editWordQuestionForm.choice1,
-                      callback: function($$v) {
-                        _vm.$set(_vm.editWordQuestionForm, "choice1", $$v)
-                      },
-                      expression: "editWordQuestionForm.choice1"
-                    }
-                  }),
+                  _vm.editErrors.choice1
+                    ? _c(
+                        "ul",
+                        _vm._l(_vm.editErrors.choice1, function(msg) {
+                          return _c("li", { key: msg }, [
+                            _vm._v("\n          " + _vm._s(msg) + "\n        ")
+                          ])
+                        }),
+                        0
+                      )
+                    : _vm._e(),
                   _vm._v(" "),
-                  _c("v-text-field", {
-                    attrs: {
-                      rules: _vm.choicesRules,
-                      counter: 30,
-                      label: "選択肢2",
-                      required: ""
-                    },
-                    model: {
-                      value: _vm.editWordQuestionForm.choice2,
-                      callback: function($$v) {
-                        _vm.$set(_vm.editWordQuestionForm, "choice2", $$v)
-                      },
-                      expression: "editWordQuestionForm.choice2"
-                    }
-                  }),
+                  _vm.editErrors.choice2
+                    ? _c(
+                        "ul",
+                        _vm._l(_vm.editErrors.choice2, function(msg) {
+                          return _c("li", { key: msg }, [
+                            _vm._v("\n          " + _vm._s(msg) + "\n        ")
+                          ])
+                        }),
+                        0
+                      )
+                    : _vm._e(),
                   _vm._v(" "),
-                  _c("v-text-field", {
-                    attrs: {
-                      rules: _vm.choicesRules,
-                      counter: 30,
-                      label: "選択肢3",
-                      required: ""
-                    },
-                    model: {
-                      value: _vm.editWordQuestionForm.choice3,
-                      callback: function($$v) {
-                        _vm.$set(_vm.editWordQuestionForm, "choice3", $$v)
-                      },
-                      expression: "editWordQuestionForm.choice3"
-                    }
-                  })
-                ],
-                1
-              ),
-              _vm._v(" "),
-              _c(
-                "v-container",
-                { staticClass: "px-0", attrs: { fluid: "" } },
-                [
-                  _c("h5", [_vm._v("正解の選択肢")]),
+                  _vm.editErrors.choice3
+                    ? _c(
+                        "ul",
+                        _vm._l(_vm.editErrors.choice3, function(msg) {
+                          return _c("li", { key: msg }, [
+                            _vm._v("\n          " + _vm._s(msg) + "\n        ")
+                          ])
+                        }),
+                        0
+                      )
+                    : _vm._e(),
                   _vm._v(" "),
-                  _c(
-                    "v-radio-group",
-                    {
-                      model: {
-                        value: _vm.editWordQuestionForm.answer,
-                        callback: function($$v) {
-                          _vm.$set(_vm.editWordQuestionForm, "answer", $$v)
-                        },
-                        expression: "editWordQuestionForm.answer"
-                      }
-                    },
-                    _vm._l(3, function(n) {
-                      return _c("v-radio", {
-                        key: n,
-                        attrs: { label: "選択肢 " + n, value: n }
-                      })
-                    }),
-                    1
-                  )
-                ],
-                1
-              ),
-              _vm._v(" "),
-              _c(
-                "v-btn",
-                {
-                  attrs: { type: "submit", color: "secondary" },
-                  on: { click: _vm.fetch }
-                },
-                [_vm._v("編集前に戻す")]
-              ),
-              _vm._v(" "),
-              _c(
-                "v-btn",
-                {
-                  attrs: { type: "submit", color: "primary" },
-                  on: { click: _vm.nextPage }
-                },
-                [_vm._v("次へ")]
-              )
-            ],
-            1
-          )
-        : _c(
-            "div",
-            [
-              _vm.editErrors
-                ? _c("div", { staticClass: "errors" }, [
-                    _vm.editErrors.group
-                      ? _c(
-                          "ul",
-                          _vm._l(_vm.editErrors.group, function(msg) {
-                            return _c("li", { key: msg }, [
-                              _vm._v(
-                                "\n          " + _vm._s(msg) + "\n        "
-                              )
-                            ])
-                          }),
-                          0
-                        )
-                      : _vm._e(),
-                    _vm._v(" "),
-                    _vm.editErrors.japanese
-                      ? _c(
-                          "ul",
-                          _vm._l(_vm.editErrors.japanese, function(msg) {
-                            return _c("li", { key: msg }, [
-                              _vm._v(
-                                "\n          " + _vm._s(msg) + "\n        "
-                              )
-                            ])
-                          }),
-                          0
-                        )
-                      : _vm._e(),
-                    _vm._v(" "),
-                    _vm.editErrors.choice1
-                      ? _c(
-                          "ul",
-                          _vm._l(_vm.editErrors.choice1, function(msg) {
-                            return _c("li", { key: msg }, [
-                              _vm._v(
-                                "\n          " + _vm._s(msg) + "\n        "
-                              )
-                            ])
-                          }),
-                          0
-                        )
-                      : _vm._e(),
-                    _vm._v(" "),
-                    _vm.editErrors.choice2
-                      ? _c(
-                          "ul",
-                          _vm._l(_vm.editErrors.choice2, function(msg) {
-                            return _c("li", { key: msg }, [
-                              _vm._v(
-                                "\n          " + _vm._s(msg) + "\n        "
-                              )
-                            ])
-                          }),
-                          0
-                        )
-                      : _vm._e(),
-                    _vm._v(" "),
-                    _vm.editErrors.choice3
-                      ? _c(
-                          "ul",
-                          _vm._l(_vm.editErrors.choice3, function(msg) {
-                            return _c("li", { key: msg }, [
-                              _vm._v(
-                                "\n          " + _vm._s(msg) + "\n        "
-                              )
-                            ])
-                          }),
-                          0
-                        )
-                      : _vm._e(),
-                    _vm._v(" "),
-                    _vm.editErrors.answer
-                      ? _c(
-                          "ul",
-                          _vm._l(_vm.editErrors.choice1, function(msg) {
-                            return _c("li", { key: msg }, [
-                              _vm._v(
-                                "\n          " + _vm._s(msg) + "\n        "
-                              )
-                            ])
-                          }),
-                          0
-                        )
-                      : _vm._e()
-                  ])
-                : _vm._e(),
-              _vm._v(" "),
-              _c(
-                "v-container",
-                [
-                  _c("dl", [
-                    _c("dt", [_vm._v("グループ")]),
-                    _vm._v(" "),
-                    _c("dd", [_vm._v(_vm._s(_vm.editWordQuestionForm.group))]),
-                    _vm._v(" "),
-                    _c("dt", [_vm._v("日本語")]),
-                    _vm._v(" "),
-                    _c("dd", [
-                      _vm._v(_vm._s(_vm.editWordQuestionForm.japanese))
-                    ]),
-                    _vm._v(" "),
-                    _c("dt", [_vm._v("選択肢1")]),
-                    _vm._v(" "),
-                    _c("dd", [
-                      _vm._v(_vm._s(_vm.editWordQuestionForm.choice1))
-                    ]),
-                    _vm._v(" "),
-                    _c("dt", [_vm._v("選択肢2")]),
-                    _vm._v(" "),
-                    _c("dd", [
-                      _vm._v(_vm._s(_vm.editWordQuestionForm.choice2))
-                    ]),
-                    _vm._v(" "),
-                    _c("dt", [_vm._v("選択肢3")]),
-                    _vm._v(" "),
-                    _c("dd", [
-                      _vm._v(_vm._s(_vm.editWordQuestionForm.choice3))
-                    ]),
-                    _vm._v(" "),
-                    _c("dt", [_vm._v("正解の選択肢")]),
-                    _vm._v(" "),
-                    _c("dd", [_vm._v(_vm._s(_vm.editWordQuestionForm.answer))])
-                  ]),
+                  _vm.editErrors.answer
+                    ? _c(
+                        "ul",
+                        _vm._l(_vm.editErrors.choice1, function(msg) {
+                          return _c("li", { key: msg }, [
+                            _vm._v("\n          " + _vm._s(msg) + "\n        ")
+                          ])
+                        }),
+                        0
+                      )
+                    : _vm._e()
+                ])
+              : _vm._e(),
+            _vm._v(" "),
+            _c(
+              "v-container",
+              [
+                _c("dl", [
+                  _c("dt", [_vm._v("グループ")]),
                   _vm._v(" "),
-                  _c(
-                    "v-btn",
-                    {
-                      attrs: { type: "submit", color: "secondary" },
-                      on: { click: _vm.prePage }
-                    },
-                    [_vm._v("戻る")]
-                  ),
+                  _c("dd", [_vm._v(_vm._s(_vm.editWordQuestionForm.group))]),
                   _vm._v(" "),
-                  _c(
-                    "v-btn",
-                    {
-                      attrs: { type: "submit", color: "primary" },
-                      on: { click: _vm.update }
-                    },
-                    [_vm._v("更新")]
-                  )
-                ],
-                1
-              )
-            ],
-            1
-          )
-    ],
-    1
-  )
+                  _c("dt", [_vm._v("日本語")]),
+                  _vm._v(" "),
+                  _c("dd", [_vm._v(_vm._s(_vm.editWordQuestionForm.japanese))]),
+                  _vm._v(" "),
+                  _c("dt", [_vm._v("選択肢1")]),
+                  _vm._v(" "),
+                  _c("dd", [_vm._v(_vm._s(_vm.editWordQuestionForm.choice1))]),
+                  _vm._v(" "),
+                  _c("dt", [_vm._v("選択肢2")]),
+                  _vm._v(" "),
+                  _c("dd", [_vm._v(_vm._s(_vm.editWordQuestionForm.choice2))]),
+                  _vm._v(" "),
+                  _c("dt", [_vm._v("選択肢3")]),
+                  _vm._v(" "),
+                  _c("dd", [_vm._v(_vm._s(_vm.editWordQuestionForm.choice3))]),
+                  _vm._v(" "),
+                  _c("dt", [_vm._v("正解の選択肢")]),
+                  _vm._v(" "),
+                  _c("dd", [_vm._v(_vm._s(_vm.editWordQuestionForm.answer))])
+                ]),
+                _vm._v(" "),
+                _c(
+                  "v-btn",
+                  {
+                    attrs: { type: "submit", color: "secondary" },
+                    on: { click: _vm.prePage }
+                  },
+                  [_vm._v("戻る")]
+                ),
+                _vm._v(" "),
+                _c(
+                  "v-btn",
+                  {
+                    attrs: { type: "submit", color: "primary" },
+                    on: { click: _vm.update }
+                  },
+                  [_vm._v("更新")]
+                )
+              ],
+              1
+            )
+          ],
+          1
+        )
+  ])
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -7607,23 +7712,43 @@ var render = function() {
   return _c(
     "div",
     [
-      _c("h1", [_vm._v("Mypage")]),
-      _vm._v(" "),
-      _c("v-btn", [_vm._v("test")]),
+      _c("h3", [_vm._v("マイページ")]),
       _vm._v(" "),
       _vm.isAdmin
-        ? _c(
-            "div",
+        ? _c("ul", [
+            _c(
+              "li",
+              [
+                _c("router-link", { attrs: { to: "/admin" } }, [
+                  _vm._v("管理者用のマイページ")
+                ])
+              ],
+              1
+            )
+          ])
+        : _vm._e(),
+      _vm._v(" "),
+      _c("p", [_vm._v("ようこそ " + _vm._s(_vm.username) + " さん")]),
+      _vm._v(" "),
+      _c("h5", [_vm._v("もんだいをとく")]),
+      _vm._v(" "),
+      _vm._l(_vm.groups, function(group) {
+        return _c("ul", { key: group.index }, [
+          _c(
+            "li",
             [
-              _c("router-link", { attrs: { to: "/admin" } }, [
-                _vm._v("管理者用のマイページへ")
-              ])
+              _c(
+                "router-link",
+                { attrs: { to: "/answer-word-question/" + group.id } },
+                [_vm._v(_vm._s(group.name))]
+              )
             ],
             1
           )
-        : _vm._e()
+        ])
+      })
     ],
-    1
+    2
   )
 }
 var staticRenderFns = []
@@ -7649,25 +7774,51 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c(
-    "div",
-    [
-      _c("h1", [_vm._v("管理者用マイページ")]),
+  return _c("div", [
+    _c("h3", [_vm._v("管理者用マイページ")]),
+    _vm._v(" "),
+    _c("ul", [
+      _c(
+        "li",
+        [
+          _c("router-link", { attrs: { to: "/" } }, [
+            _vm._v("ユーザーのマイページ")
+          ])
+        ],
+        1
+      ),
       _vm._v(" "),
-      _c("router-link", { attrs: { to: "/" } }, [
-        _vm._v("ユーザーのマイページへ")
-      ]),
+      _c(
+        "li",
+        [
+          _c("router-link", { attrs: { to: "/create-group" } }, [
+            _vm._v("グループ作成")
+          ])
+        ],
+        1
+      ),
       _vm._v(" "),
-      _c("router-link", { attrs: { to: "/create-word-question" } }, [
-        _vm._v("問題作成")
-      ]),
+      _c(
+        "li",
+        [
+          _c("router-link", { attrs: { to: "/create-word-question" } }, [
+            _vm._v("問題作成")
+          ])
+        ],
+        1
+      ),
       _vm._v(" "),
-      _c("router-link", { attrs: { to: "/word-question-list" } }, [
-        _vm._v("問題一覧")
-      ])
-    ],
-    1
-  )
+      _c(
+        "li",
+        [
+          _c("router-link", { attrs: { to: "/word-question-list" } }, [
+            _vm._v("問題一覧")
+          ])
+        ],
+        1
+      )
+    ])
+  ])
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -7693,7 +7844,19 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", [
-    _c("span", [_vm._v("問題一覧画面")]),
+    _c("h3", [_vm._v("問題一覧")]),
+    _vm._v(" "),
+    _c("ul", [
+      _c(
+        "li",
+        [
+          _c("router-link", { attrs: { to: "/admin" } }, [
+            _vm._v("管理者のマイページ")
+          ])
+        ],
+        1
+      )
+    ]),
     _vm._v(" "),
     _c(
       "div",

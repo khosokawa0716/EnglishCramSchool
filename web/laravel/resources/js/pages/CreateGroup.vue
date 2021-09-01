@@ -1,6 +1,9 @@
 <template>
   <div>
-    <span>グループ作成画面</span>
+    <h3>グループ作成</h3>
+    <ul>
+      <li><router-link to="/admin">管理者のマイページ</router-link></li>
+    </ul>
     <div v-if="registerErrors" class="errors">
       <ul v-if="registerErrors.group">
         <li v-for="msg in registerErrors.group" :key="msg">

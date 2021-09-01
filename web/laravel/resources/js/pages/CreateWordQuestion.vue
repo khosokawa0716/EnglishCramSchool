@@ -1,6 +1,9 @@
 <template>
   <div>
-    <span>問題作成画面{{ groupId }}</span>
+    <h3>問題作成</h3>
+    <ul>
+      <li><router-link to="/admin">管理者のマイページ</router-link></li>
+    </ul>
     <div v-if="page === 1">
       <v-form @submit.prevent="createWordQuestion">
         <v-select

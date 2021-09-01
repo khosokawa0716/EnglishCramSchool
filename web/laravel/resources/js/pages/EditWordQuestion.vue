@@ -1,7 +1,10 @@
 <template>
   <div>
-    <span>問題編集画面</span>
-    <router-link to="/word-question-list">問題一覧</router-link>
+    <h3>問題作成</h3>
+    <ul>
+      <li><router-link to="/admin">管理者のマイページ</router-link></li>
+      <li><router-link to="/word-question-list">問題一覧</router-link></li>
+    </ul>
     <div v-if="page === 1">
       <v-form @submit.prevent="editWordQuestion">
         <v-select

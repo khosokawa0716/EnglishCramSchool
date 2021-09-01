@@ -12,7 +12,7 @@
         <p v-show="questions.length === numberOfCorrectAnswers">
           ぜんもんせいかい、すごいね！
         </p>
-        <RouterLink to="/">マイページへもどる</RouterLink>
+        <RouterLink to="/">マイページもどる</RouterLink>
       </v-container>
       <v-container v-else>
         <h3>にほんごに合うえいごをえらんで、「かいとう」ボタンをおしてね。</h3>

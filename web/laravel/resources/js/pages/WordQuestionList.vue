@@ -1,6 +1,9 @@
 <template>
   <div>
-    <span>問題一覧画面</span>
+    <h3>問題一覧</h3>
+    <ul>
+      <li><router-link to="/admin">管理者のマイページ</router-link></li>
+    </ul>
     <div>
       <v-container>
         <v-simple-table>
