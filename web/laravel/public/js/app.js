@@ -2076,7 +2076,9 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       selectedAnswers: [],
       selectedAnswer: '',
       answer: '',
-      id: this.$route.params.id
+      id: this.$route.params.id,
+      groupsId: [],
+      groupsName: []
     };
   },
   computed: {
@@ -2090,7 +2092,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       var _this = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee() {
-        var response, i, choiceArray;
+        var response, responseGroup, i, choiceArray;
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
           while (1) {
             switch (_context.prev = _context.next) {
@@ -2100,9 +2102,14 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
               case 2:
                 response = _context.sent;
+                _context.next = 5;
+                return axios.get("/api/create-group");
+
+              case 5:
+                responseGroup = _context.sent;
 
                 if (!(response.status !== _util__WEBPACK_IMPORTED_MODULE_1__.OK)) {
-                  _context.next = 6;
+                  _context.next = 9;
                   break;
                 }
 
@@ -2110,8 +2117,16 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
                 return _context.abrupt("return", false);
 
-              case 6:
+              case 9:
                 // 成功の場合、問題の情報をプロパティに代入
+                _this.groupsId = responseGroup.data.map(function (obj) {
+                  return obj.id;
+                }); // responseGroupからidだけを取り出して新しい配列にする
+
+                _this.groupsName = responseGroup.data.map(function (obj) {
+                  return obj.name;
+                }); // responseGroupからnameだけを取り出して新しい配列にする
+
                 _this.questions = response.data;
 
                 for (i = 0; i < _this.questions.length; i++) {
@@ -2127,7 +2142,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                   _this.choices.push(choiceArray);
                 }
 
-              case 8:
+              case 13:
               case "end":
                 return _context.stop();
             }
@@ -2157,10 +2172,197 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       this.dialog = false;
       this.end = true;
       this.current++;
+    },
+    findGroupName: function findGroupName(val) {
+      var isGroupId = function isGroupId(group_id) {
+        return group_id === Number(val);
+      }; // 配列をチェックする関数。引数がvalと正しいかどうか
+
+
+      var index = this.groupsId.findIndex(isGroupId); // groupのidの配列からgroup_idと等しい数値のindexを探す
+
+      return this.groupsName[index];
     }
   },
   created: function created() {
     this.fetch();
+  }
+});
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/pages/CreateGroup.vue?vue&type=script&lang=js&":
+/*!*************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/pages/CreateGroup.vue?vue&type=script&lang=js& ***!
+  \*************************************************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _util__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../util */ "./resources/js/util.js");
+
+
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  data: function data() {
+    return {
+      group: '',
+      groups: [],
+      groupRules: [function (v) {
+        return !!v || 'グループは必ず入れてください';
+      }, function (v) {
+        return v.length <= 20 || 'グループは２０もじ以下で入れてください';
+      }],
+      registerErrors: null
+    };
+  },
+  methods: {
+    fetch: function fetch() {
+      var _this = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee() {
+        var response, i;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
+          while (1) {
+            switch (_context.prev = _context.next) {
+              case 0:
+                _context.next = 2;
+                return axios.get("/api/create-group");
+
+              case 2:
+                response = _context.sent;
+
+                if (!(response.status !== _util__WEBPACK_IMPORTED_MODULE_1__.OK)) {
+                  _context.next = 6;
+                  break;
+                }
+
+                _this.$store.commit('error/setCode', response.status);
+
+                return _context.abrupt("return", false);
+
+              case 6:
+                // 成功の場合、問題の情報をプロパティに代入
+                _this.groups = [];
+
+                for (i = 0; i < response.data.length; i++) {
+                  _this.groups.push(response.data[i].name);
+                }
+
+              case 8:
+              case "end":
+                return _context.stop();
+            }
+          }
+        }, _callee);
+      }))();
+    },
+    register: function register() {
+      var _this2 = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee2() {
+        var response;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee2$(_context2) {
+          while (1) {
+            switch (_context2.prev = _context2.next) {
+              case 0:
+                if (!_this2.groups.includes(_this2.group)) {
+                  _context2.next = 3;
+                  break;
+                }
+
+                _this2.group = '';
+                return _context2.abrupt("return", false);
+
+              case 3:
+                _context2.next = 5;
+                return axios.post('/api/create-group/register', {
+                  name: _this2.group
+                });
+
+              case 5:
+                response = _context2.sent;
+
+                if (!(response.status === _util__WEBPACK_IMPORTED_MODULE_1__.UNPROCESSABLE_ENTITY)) {
+                  _context2.next = 11;
+                  break;
+                }
+
+                _this2.registerErrors = response.data.errors;
+                return _context2.abrupt("return", false);
+
+              case 11:
+                if (!(response.status !== _util__WEBPACK_IMPORTED_MODULE_1__.OK)) {
+                  _context2.next = 14;
+                  break;
+                }
+
+                // その他のエラー
+                _this2.$store.commit('error/setCode', response.status);
+
+                return _context2.abrupt("return", false);
+
+              case 14:
+                console.log('登録できました');
+
+                _this2.fetch();
+
+              case 16:
+              case "end":
+                return _context2.stop();
+            }
+          }
+        }, _callee2);
+      }))();
+    },
+    clearError: function clearError() {
+      this.$store.commit('error/setCode', null);
+    }
+  },
+  created: function created() {
+    this.fetch();
+    this.clearError();
   }
 });
 
@@ -2296,24 +2498,23 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
     return {
       page: 1,
+      groupsId: [],
       createWordQuestionForm: {
         group: '',
+        // group_id: this.groupId,
+        groupsName: [],
         japanese: '',
         choice1: '',
         choice2: '',
         choice3: '',
         answer: 1
       },
-      groupRules: [function (v) {
-        return !!v || 'グループは必ず入れてください';
-      }, function (v) {
-        return v.length <= 20 || 'グループは２０もじ以下で入れてください';
-      }],
       japaneseRules: [function (v) {
         return !!v || '日本語は必ず入れてください';
       }, function (v) {
@@ -2327,9 +2528,22 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       registerErrors: null
     };
   },
-  methods: {
-    register: function register() {
+  computed: {
+    groupId: function groupId() {
       var _this = this;
+
+      var isGroup = function isGroup(group) {
+        return group === _this.createWordQuestionForm.group;
+      };
+
+      console.log(isGroup);
+      var index = this.createWordQuestionForm.groupsName.findIndex(isGroup);
+      return this.groupsId[index];
+    }
+  },
+  methods: {
+    fetchGroups: function fetchGroups() {
+      var _this2 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee() {
         var response;
@@ -2338,39 +2552,84 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
             switch (_context.prev = _context.next) {
               case 0:
                 _context.next = 2;
-                return axios.post('/api/create-word-question/register', _this.createWordQuestionForm);
+                return axios.get("/api/create-group");
 
               case 2:
                 response = _context.sent;
 
-                if (!(response.status === _util__WEBPACK_IMPORTED_MODULE_1__.UNPROCESSABLE_ENTITY)) {
-                  _context.next = 8;
+                if (!(response.status !== _util__WEBPACK_IMPORTED_MODULE_1__.OK)) {
+                  _context.next = 6;
                   break;
                 }
 
-                _this.registerErrors = response.data.errors;
+                _this2.$store.commit('error/setCode', response.status);
+
                 return _context.abrupt("return", false);
+
+              case 6:
+                // 成功の場合、問題の情報をプロパティに代入
+                _this2.createWordQuestionForm.groupsName = response.data.map(function (obj) {
+                  return obj.name;
+                });
+                _this2.groupsId = response.data.map(function (obj) {
+                  return obj.id;
+                });
 
               case 8:
-                if (!(response.status !== _util__WEBPACK_IMPORTED_MODULE_1__.OK)) {
-                  _context.next = 11;
-                  break;
-                }
-
-                // その他のエラー
-                _this.$store.commit('error/setCode', response.status);
-
-                return _context.abrupt("return", false);
-
-              case 11:
-                _this.$router.push('/');
-
-              case 12:
               case "end":
                 return _context.stop();
             }
           }
         }, _callee);
+      }))();
+    },
+    register: function register() {
+      var _this3 = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee2() {
+        var response;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee2$(_context2) {
+          while (1) {
+            switch (_context2.prev = _context2.next) {
+              case 0:
+                _context2.next = 2;
+                return axios.post('/api/create-word-question/register', _this3.createWordQuestionForm, {
+                  params: {
+                    group_id: _this3.groupId
+                  }
+                });
+
+              case 2:
+                response = _context2.sent;
+
+                if (!(response.status === _util__WEBPACK_IMPORTED_MODULE_1__.UNPROCESSABLE_ENTITY)) {
+                  _context2.next = 8;
+                  break;
+                }
+
+                _this3.registerErrors = response.data.errors;
+                return _context2.abrupt("return", false);
+
+              case 8:
+                if (!(response.status !== _util__WEBPACK_IMPORTED_MODULE_1__.OK)) {
+                  _context2.next = 11;
+                  break;
+                }
+
+                // その他のエラー
+                _this3.$store.commit('error/setCode', response.status);
+
+                return _context2.abrupt("return", false);
+
+              case 11:
+                _this3.$router.push('/');
+
+              case 12:
+              case "end":
+                return _context2.stop();
+            }
+          }
+        }, _callee2);
       }))();
     },
     clearError: function clearError() {
@@ -2393,6 +2652,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
   },
   created: function created() {
     this.clearError();
+    this.fetchGroups();
   }
 });
 
@@ -2529,25 +2789,24 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
     return {
       page: 1,
+      groupsId: [],
       editWordQuestionForm: {
         id: this.$route.params.id,
         group: '',
+        group_id: 0,
+        groupsName: [],
         japanese: '',
         choice1: '',
         choice2: '',
         choice3: '',
         answer: 1
       },
-      groupRules: [function (v) {
-        return !!v || 'グループは必ず入れてください';
-      }, function (v) {
-        return v.length <= 20 || 'グループは２０もじ以下で入れてください';
-      }],
       japaneseRules: [function (v) {
         return !!v || '日本語は必ず入れてください';
       }, function (v) {
@@ -2567,7 +2826,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       var _this = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee() {
-        var response;
+        var response, responseGroup, isGroupId, index;
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
           while (1) {
             switch (_context.prev = _context.next) {
@@ -2577,9 +2836,14 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
               case 2:
                 response = _context.sent;
+                _context.next = 5;
+                return axios.get("/api/create-group");
+
+              case 5:
+                responseGroup = _context.sent;
 
                 if (!(response.status !== _util__WEBPACK_IMPORTED_MODULE_1__.OK)) {
-                  _context.next = 6;
+                  _context.next = 9;
                   break;
                 }
 
@@ -2587,16 +2851,31 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
                 return _context.abrupt("return", false);
 
-              case 6:
+              case 9:
                 // 成功の場合、問題の情報をプロパティに代入
-                _this.editWordQuestionForm.group = response.data.group;
+                _this.editWordQuestionForm.group_id = response.data.group_id;
                 _this.editWordQuestionForm.japanese = response.data.japanese;
                 _this.editWordQuestionForm.choice1 = response.data.choice1;
                 _this.editWordQuestionForm.choice2 = response.data.choice2;
                 _this.editWordQuestionForm.choice3 = response.data.choice3;
                 _this.editWordQuestionForm.answer = response.data.answer;
+                _this.editWordQuestionForm.groupsName = responseGroup.data.map(function (obj) {
+                  return obj.name;
+                });
+                _this.groupsId = responseGroup.data.map(function (obj) {
+                  return obj.id;
+                }); // responseGroupからidだけを取り出して新しい配列にする
 
-              case 12:
+                isGroupId = function isGroupId(group_id) {
+                  return group_id === _this.editWordQuestionForm.group_id;
+                }; // 配列をチェックする関数。引数がthis.editWordQuestionForm.group_idと正しいかどうか
+
+
+                index = _this.groupsId.findIndex(isGroupId); // groupのidの配列からgroup_idと等しい数値のindexを探す
+
+                _this.editWordQuestionForm.group = _this.editWordQuestionForm.groupsName[index];
+
+              case 20:
               case "end":
                 return _context.stop();
             }
@@ -2608,28 +2887,43 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       var _this2 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee2() {
-        var response;
+        var isGroupName, groupNameIndex, selected_group_id, response;
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee2$(_context2) {
           while (1) {
             switch (_context2.prev = _context2.next) {
               case 0:
-                _context2.next = 2;
-                return axios.put("/api/edit-word-question/".concat(_this2.editWordQuestionForm.id), _this2.editWordQuestionForm);
+                isGroupName = function isGroupName(group_name) {
+                  return group_name === _this2.editWordQuestionForm.group;
+                }; // 配列をチェックする関数。引数がthis.editWordQuestionForm.groupsNameと正しいかどうか
+                // 選択されたgroupからselected_group_idを求める
 
-              case 2:
+
+                groupNameIndex = _this2.editWordQuestionForm.groupsName.findIndex(isGroupName); // groupのidの配列からgroup_idと等しい数値のindexを探す
+
+                selected_group_id = _this2.groupsId[groupNameIndex]; // 入力内容で、WordQuestionController@updateを起動
+                // 返却されたオブジェクトをresponseに代入
+
+                _context2.next = 5;
+                return axios.put("/api/edit-word-question/".concat(_this2.editWordQuestionForm.id), _this2.editWordQuestionForm, {
+                  params: {
+                    selected_group_id: selected_group_id
+                  }
+                });
+
+              case 5:
                 response = _context2.sent;
 
                 if (!(response.status === _util__WEBPACK_IMPORTED_MODULE_1__.UNPROCESSABLE_ENTITY)) {
-                  _context2.next = 8;
+                  _context2.next = 11;
                   break;
                 }
 
                 _this2.editErrors = response.data.errors;
                 return _context2.abrupt("return", false);
 
-              case 8:
+              case 11:
                 if (!(response.status !== _util__WEBPACK_IMPORTED_MODULE_1__.OK)) {
-                  _context2.next = 11;
+                  _context2.next = 14;
                   break;
                 }
 
@@ -2638,10 +2932,10 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
                 return _context2.abrupt("return", false);
 
-              case 11:
+              case 14:
                 _this2.$router.push('/admin');
 
-              case 12:
+              case 15:
               case "end":
                 return _context2.stop();
             }
@@ -2880,6 +3174,15 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _util__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../util */ "./resources/js/util.js");
+
+
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
 //
 //
 //
@@ -2889,11 +3192,77 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  data: function data() {
+    return {
+      groups: []
+    };
+  },
   computed: {
     isAdmin: function isAdmin() {
       return this.$store.getters['auth/username'] === 'admin';
+    },
+    username: function username() {
+      return this.$store.getters['auth/username'];
     }
+  },
+  methods: {
+    fetch: function fetch() {
+      var _this = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee() {
+        var response, i, group;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
+          while (1) {
+            switch (_context.prev = _context.next) {
+              case 0:
+                _context.next = 2;
+                return axios.get("/api/create-group");
+
+              case 2:
+                response = _context.sent;
+
+                if (!(response.status !== _util__WEBPACK_IMPORTED_MODULE_1__.OK)) {
+                  _context.next = 6;
+                  break;
+                }
+
+                _this.$store.commit('error/setCode', response.status);
+
+                return _context.abrupt("return", false);
+
+              case 6:
+                // 成功の場合、問題の情報をプロパティに代入
+                _this.groups = [];
+
+                for (i = 0; i < response.data.length; i++) {
+                  group = new Object();
+                  group.id = response.data[i].id;
+                  group.name = response.data[i].name;
+
+                  _this.groups.push(group);
+                }
+
+              case 8:
+              case "end":
+                return _context.stop();
+            }
+          }
+        }, _callee);
+      }))();
+    }
+  },
+  created: function created() {
+    this.fetch();
   }
 });
 
@@ -2968,13 +3337,18 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
     return {
       questions: [],
       page: 1,
-      last_page: 1
+      last_page: 1,
+      groupsId: [],
+      groupsName: []
     };
   },
   methods: {
@@ -2983,7 +3357,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       var _this = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee() {
-        var response, url;
+        var response, responseGroup, url;
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
           while (1) {
             switch (_context.prev = _context.next) {
@@ -2997,9 +3371,14 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
               case 2:
                 response = _context.sent;
+                _context.next = 5;
+                return axios.get("/api/create-group");
+
+              case 5:
+                responseGroup = _context.sent;
 
                 if (!(response.status !== _util__WEBPACK_IMPORTED_MODULE_1__.OK)) {
-                  _context.next = 6;
+                  _context.next = 9;
                   break;
                 }
 
@@ -3007,23 +3386,40 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
                 return _context.abrupt("return", false);
 
-              case 6:
+              case 9:
                 // 成功の場合、問題の情報をプロパティに代入
-                console.log(response.data);
                 _this.questions = response.data.data;
+                _this.groupsId = responseGroup.data.map(function (obj) {
+                  return obj.id;
+                }); // responseGroupからidだけを取り出して新しい配列にする
+
+                _this.groupsName = responseGroup.data.map(function (obj) {
+                  return obj.name;
+                }); // responseGroupからnameだけを取り出して新しい配列にする
+
                 _this.page = response.data.current_page;
                 _this.last_page = response.data.last_page; // URL変更
 
                 url = '/word-question-list?page=' + _this.page;
                 window.history.pushState(null, null, url);
 
-              case 12:
+              case 16:
               case "end":
                 return _context.stop();
             }
           }
         }, _callee);
       }))();
+    },
+    findGroupName: function findGroupName(val) {
+      var isGroupId = function isGroupId(group_id) {
+        return group_id === val;
+      }; // 配列をチェックする関数。引数がvalと正しいかどうか
+
+
+      var index = this.groupsId.findIndex(isGroupId); // groupのidの配列からgroup_idと等しい数値のindexを探す
+
+      return this.groupsName[index];
     }
   },
   created: function created() {
@@ -3070,17 +3466,19 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm.js");
-/* harmony import */ var vue_router__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! vue-router */ "./node_modules/vue-router/dist/vue-router.esm.js");
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm.js");
+/* harmony import */ var vue_router__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! vue-router */ "./node_modules/vue-router/dist/vue-router.esm.js");
 /* harmony import */ var _pages_Mypage_vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./pages/Mypage.vue */ "./resources/js/pages/Mypage.vue");
 /* harmony import */ var _pages_MypageAdmin_vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./pages/MypageAdmin.vue */ "./resources/js/pages/MypageAdmin.vue");
 /* harmony import */ var _pages_Login_vue__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./pages/Login.vue */ "./resources/js/pages/Login.vue");
-/* harmony import */ var _pages_CreateWordQuestion_vue__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./pages/CreateWordQuestion.vue */ "./resources/js/pages/CreateWordQuestion.vue");
-/* harmony import */ var _pages_EditWordQuestion_vue__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./pages/EditWordQuestion.vue */ "./resources/js/pages/EditWordQuestion.vue");
-/* harmony import */ var _pages_AnswerWordQuestion_vue__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./pages/AnswerWordQuestion.vue */ "./resources/js/pages/AnswerWordQuestion.vue");
-/* harmony import */ var _pages_WordQuestionList_vue__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./pages/WordQuestionList.vue */ "./resources/js/pages/WordQuestionList.vue");
-/* harmony import */ var _pages_errors_System_vue__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./pages/errors/System.vue */ "./resources/js/pages/errors/System.vue");
-/* harmony import */ var _store__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./store */ "./resources/js/store/index.js");
+/* harmony import */ var _pages_CreateGroup_vue__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./pages/CreateGroup.vue */ "./resources/js/pages/CreateGroup.vue");
+/* harmony import */ var _pages_CreateWordQuestion_vue__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./pages/CreateWordQuestion.vue */ "./resources/js/pages/CreateWordQuestion.vue");
+/* harmony import */ var _pages_EditWordQuestion_vue__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./pages/EditWordQuestion.vue */ "./resources/js/pages/EditWordQuestion.vue");
+/* harmony import */ var _pages_AnswerWordQuestion_vue__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./pages/AnswerWordQuestion.vue */ "./resources/js/pages/AnswerWordQuestion.vue");
+/* harmony import */ var _pages_WordQuestionList_vue__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./pages/WordQuestionList.vue */ "./resources/js/pages/WordQuestionList.vue");
+/* harmony import */ var _pages_errors_System_vue__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./pages/errors/System.vue */ "./resources/js/pages/errors/System.vue");
+/* harmony import */ var _store__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./store */ "./resources/js/store/index.js");
+
 
 
 
@@ -3094,13 +3492,13 @@ __webpack_require__.r(__webpack_exports__);
  // VueRouterプラグインを使用する
 // これによって<RouterView />コンポーネントなどを使うことができる
 
-vue__WEBPACK_IMPORTED_MODULE_9__.default.use(vue_router__WEBPACK_IMPORTED_MODULE_10__.default); // パスとコンポーネントのマッピング
+vue__WEBPACK_IMPORTED_MODULE_10__.default.use(vue_router__WEBPACK_IMPORTED_MODULE_11__.default); // パスとコンポーネントのマッピング
 
 var routes = [{
   path: '/',
   component: _pages_Mypage_vue__WEBPACK_IMPORTED_MODULE_0__.default,
   beforeEnter: function beforeEnter(to, from, next) {
-    if (_store__WEBPACK_IMPORTED_MODULE_8__.default.getters["auth/check"]) {
+    if (_store__WEBPACK_IMPORTED_MODULE_9__.default.getters["auth/check"]) {
       next();
     } else {
       next('/login');
@@ -3110,7 +3508,7 @@ var routes = [{
   path: '/admin',
   component: _pages_MypageAdmin_vue__WEBPACK_IMPORTED_MODULE_1__.default,
   beforeEnter: function beforeEnter(to, from, next) {
-    if (_store__WEBPACK_IMPORTED_MODULE_8__.default.getters["auth/username"] === 'admin') {
+    if (_store__WEBPACK_IMPORTED_MODULE_9__.default.getters["auth/username"] === 'admin') {
       next();
     } else {
       next('/login');
@@ -3120,19 +3518,29 @@ var routes = [{
   path: '/login',
   component: _pages_Login_vue__WEBPACK_IMPORTED_MODULE_2__.default,
   beforeEnter: function beforeEnter(to, from, next) {
-    if (_store__WEBPACK_IMPORTED_MODULE_8__.default.getters["auth/username"] === 'admin') {
+    if (_store__WEBPACK_IMPORTED_MODULE_9__.default.getters["auth/username"] === 'admin') {
       next('/admin');
-    } else if (_store__WEBPACK_IMPORTED_MODULE_8__.default.getters["auth/check"]) {
+    } else if (_store__WEBPACK_IMPORTED_MODULE_9__.default.getters["auth/check"]) {
       next('/');
     } else {
       next();
     }
   }
 }, {
-  path: '/create-word-question',
-  component: _pages_CreateWordQuestion_vue__WEBPACK_IMPORTED_MODULE_3__.default,
+  path: '/create-group',
+  component: _pages_CreateGroup_vue__WEBPACK_IMPORTED_MODULE_3__.default,
   beforeEnter: function beforeEnter(to, from, next) {
-    if (_store__WEBPACK_IMPORTED_MODULE_8__.default.getters["auth/username"] === 'admin') {
+    if (_store__WEBPACK_IMPORTED_MODULE_9__.default.getters["auth/username"] === 'admin') {
+      next();
+    } else {
+      next('/login');
+    }
+  }
+}, {
+  path: '/create-word-question',
+  component: _pages_CreateWordQuestion_vue__WEBPACK_IMPORTED_MODULE_4__.default,
+  beforeEnter: function beforeEnter(to, from, next) {
+    if (_store__WEBPACK_IMPORTED_MODULE_9__.default.getters["auth/username"] === 'admin') {
       next();
     } else {
       next('/login');
@@ -3140,9 +3548,9 @@ var routes = [{
   }
 }, {
   path: '/edit-word-question/:id',
-  component: _pages_EditWordQuestion_vue__WEBPACK_IMPORTED_MODULE_4__.default,
+  component: _pages_EditWordQuestion_vue__WEBPACK_IMPORTED_MODULE_5__.default,
   beforeEnter: function beforeEnter(to, from, next) {
-    if (_store__WEBPACK_IMPORTED_MODULE_8__.default.getters["auth/username"] === 'admin') {
+    if (_store__WEBPACK_IMPORTED_MODULE_9__.default.getters["auth/username"] === 'admin') {
       next();
     } else {
       next('/login');
@@ -3150,9 +3558,9 @@ var routes = [{
   }
 }, {
   path: '/word-question-list',
-  component: _pages_WordQuestionList_vue__WEBPACK_IMPORTED_MODULE_6__.default,
+  component: _pages_WordQuestionList_vue__WEBPACK_IMPORTED_MODULE_7__.default,
   beforeEnter: function beforeEnter(to, from, next) {
-    if (_store__WEBPACK_IMPORTED_MODULE_8__.default.getters["auth/username"] === 'admin') {
+    if (_store__WEBPACK_IMPORTED_MODULE_9__.default.getters["auth/username"] === 'admin') {
       next();
     } else {
       next('/login');
@@ -3160,9 +3568,9 @@ var routes = [{
   }
 }, {
   path: '/answer-word-question/:id',
-  component: _pages_AnswerWordQuestion_vue__WEBPACK_IMPORTED_MODULE_5__.default,
+  component: _pages_AnswerWordQuestion_vue__WEBPACK_IMPORTED_MODULE_6__.default,
   beforeEnter: function beforeEnter(to, from, next) {
-    if (_store__WEBPACK_IMPORTED_MODULE_8__.default.getters["auth/check"]) {
+    if (_store__WEBPACK_IMPORTED_MODULE_9__.default.getters["auth/check"]) {
       next();
     } else {
       next('/login');
@@ -3170,10 +3578,10 @@ var routes = [{
   }
 }, {
   path: '/500',
-  component: _pages_errors_System_vue__WEBPACK_IMPORTED_MODULE_7__.default
+  component: _pages_errors_System_vue__WEBPACK_IMPORTED_MODULE_8__.default
 }]; // VueRouterインスタンスを作成する
 
-var router = new vue_router__WEBPACK_IMPORTED_MODULE_10__.default({
+var router = new vue_router__WEBPACK_IMPORTED_MODULE_11__.default({
   mode: 'history',
   routes: routes
 }); // VueRouterインスタンスをエクスポートする
@@ -5231,6 +5639,45 @@ component.options.__file = "resources/js/pages/AnswerWordQuestion.vue"
 
 /***/ }),
 
+/***/ "./resources/js/pages/CreateGroup.vue":
+/*!********************************************!*\
+  !*** ./resources/js/pages/CreateGroup.vue ***!
+  \********************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _CreateGroup_vue_vue_type_template_id_2deb026a___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./CreateGroup.vue?vue&type=template&id=2deb026a& */ "./resources/js/pages/CreateGroup.vue?vue&type=template&id=2deb026a&");
+/* harmony import */ var _CreateGroup_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./CreateGroup.vue?vue&type=script&lang=js& */ "./resources/js/pages/CreateGroup.vue?vue&type=script&lang=js&");
+/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! !../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+;
+var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__.default)(
+  _CreateGroup_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__.default,
+  _CreateGroup_vue_vue_type_template_id_2deb026a___WEBPACK_IMPORTED_MODULE_0__.render,
+  _CreateGroup_vue_vue_type_template_id_2deb026a___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns,
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/pages/CreateGroup.vue"
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (component.exports);
+
+/***/ }),
+
 /***/ "./resources/js/pages/CreateWordQuestion.vue":
 /*!***************************************************!*\
   !*** ./resources/js/pages/CreateWordQuestion.vue ***!
@@ -5548,6 +5995,22 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./resources/js/pages/CreateGroup.vue?vue&type=script&lang=js&":
+/*!*********************************************************************!*\
+  !*** ./resources/js/pages/CreateGroup.vue?vue&type=script&lang=js& ***!
+  \*********************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_0_rules_0_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_CreateGroup_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./CreateGroup.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/pages/CreateGroup.vue?vue&type=script&lang=js&");
+ /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_0_rules_0_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_CreateGroup_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__.default); 
+
+/***/ }),
+
 /***/ "./resources/js/pages/CreateWordQuestion.vue?vue&type=script&lang=js&":
 /*!****************************************************************************!*\
   !*** ./resources/js/pages/CreateWordQuestion.vue?vue&type=script&lang=js& ***!
@@ -5692,6 +6155,23 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "staticRenderFns": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_AnswerWordQuestion_vue_vue_type_template_id_378f8e37___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns)
 /* harmony export */ });
 /* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_AnswerWordQuestion_vue_vue_type_template_id_378f8e37___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./AnswerWordQuestion.vue?vue&type=template&id=378f8e37& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/pages/AnswerWordQuestion.vue?vue&type=template&id=378f8e37&");
+
+
+/***/ }),
+
+/***/ "./resources/js/pages/CreateGroup.vue?vue&type=template&id=2deb026a&":
+/*!***************************************************************************!*\
+  !*** ./resources/js/pages/CreateGroup.vue?vue&type=template&id=2deb026a& ***!
+  \***************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "render": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_CreateGroup_vue_vue_type_template_id_2deb026a___WEBPACK_IMPORTED_MODULE_0__.render),
+/* harmony export */   "staticRenderFns": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_CreateGroup_vue_vue_type_template_id_2deb026a___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns)
+/* harmony export */ });
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_CreateGroup_vue_vue_type_template_id_2deb026a___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./CreateGroup.vue?vue&type=template&id=2deb026a& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/pages/CreateGroup.vue?vue&type=template&id=2deb026a&");
 
 
 /***/ }),
@@ -5954,7 +6434,7 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", [
-    _c("span", [_vm._v(_vm._s(_vm.id) + "のもんだい")]),
+    _c("span", [_vm._v(_vm._s(_vm.findGroupName(_vm.id)) + "のもんだい")]),
     _vm._v(" "),
     _c(
       "div",
@@ -5993,7 +6473,7 @@ var render = function() {
                 ),
                 _vm._v(" "),
                 _c("RouterLink", { attrs: { to: "/" } }, [
-                  _vm._v("マイページへもどる")
+                  _vm._v("マイページもどる")
                 ])
               ],
               1
@@ -6194,6 +6674,118 @@ render._withStripped = true
 
 /***/ }),
 
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/pages/CreateGroup.vue?vue&type=template&id=2deb026a&":
+/*!******************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/pages/CreateGroup.vue?vue&type=template&id=2deb026a& ***!
+  \******************************************************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "render": () => (/* binding */ render),
+/* harmony export */   "staticRenderFns": () => (/* binding */ staticRenderFns)
+/* harmony export */ });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "div",
+    [
+      _c("h3", [_vm._v("グループ作成")]),
+      _vm._v(" "),
+      _c("ul", [
+        _c(
+          "li",
+          [
+            _c("router-link", { attrs: { to: "/admin" } }, [
+              _vm._v("管理者のマイページ")
+            ])
+          ],
+          1
+        )
+      ]),
+      _vm._v(" "),
+      _vm.registerErrors
+        ? _c("div", { staticClass: "errors" }, [
+            _vm.registerErrors.group
+              ? _c(
+                  "ul",
+                  _vm._l(_vm.registerErrors.group, function(msg) {
+                    return _c("li", { key: msg }, [
+                      _vm._v("\n        " + _vm._s(msg) + "\n      ")
+                    ])
+                  }),
+                  0
+                )
+              : _vm._e()
+          ])
+        : _vm._e(),
+      _vm._v(" "),
+      _c(
+        "v-form",
+        {
+          on: {
+            submit: function($event) {
+              $event.preventDefault()
+              return _vm.register.apply(null, arguments)
+            }
+          }
+        },
+        [
+          _c("v-text-field", {
+            attrs: {
+              rules: _vm.groupRules,
+              counter: 20,
+              label: "グループ",
+              required: ""
+            },
+            model: {
+              value: _vm.group,
+              callback: function($$v) {
+                _vm.group = $$v
+              },
+              expression: "group"
+            }
+          })
+        ],
+        1
+      ),
+      _vm._v(" "),
+      _c(
+        "v-btn",
+        {
+          attrs: { type: "submit", color: "primary" },
+          on: { click: _vm.register }
+        },
+        [_vm._v("グループ登録")]
+      ),
+      _vm._v(" "),
+      _c(
+        "div",
+        [
+          _c("span", [_vm._v("登録されたグループ")]),
+          _vm._v(" "),
+          _vm._l(_vm.groups, function(group) {
+            return _c("ul", { key: group.index }, [
+              _c("li", [_vm._v(_vm._s(group))])
+            ])
+          })
+        ],
+        2
+      )
+    ],
+    1
+  )
+}
+var staticRenderFns = []
+render._withStripped = true
+
+
+
+/***/ }),
+
 /***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/pages/CreateWordQuestion.vue?vue&type=template&id=e9269916&":
 /*!*************************************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/pages/CreateWordQuestion.vue?vue&type=template&id=e9269916& ***!
@@ -6211,7 +6803,19 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", [
-    _c("span", [_vm._v("問題作成画面")]),
+    _c("h3", [_vm._v("問題作成")]),
+    _vm._v(" "),
+    _c("ul", [
+      _c(
+        "li",
+        [
+          _c("router-link", { attrs: { to: "/admin" } }, [
+            _vm._v("管理者のマイページ")
+          ])
+        ],
+        1
+      )
+    ]),
     _vm._v(" "),
     _vm.page === 1
       ? _c(
@@ -6228,12 +6832,10 @@ var render = function() {
                 }
               },
               [
-                _c("v-text-field", {
+                _c("v-select", {
                   attrs: {
-                    rules: _vm.groupRules,
-                    counter: 20,
-                    label: "グループ",
-                    required: ""
+                    items: _vm.createWordQuestionForm.groupsName,
+                    label: "グループ"
                   },
                   model: {
                     value: _vm.createWordQuestionForm.group,
@@ -6524,316 +7126,308 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c(
-    "div",
-    [
-      _c("span", [_vm._v("問題編集画面")]),
+  return _c("div", [
+    _c("h3", [_vm._v("問題作成")]),
+    _vm._v(" "),
+    _c("ul", [
+      _c(
+        "li",
+        [
+          _c("router-link", { attrs: { to: "/admin" } }, [
+            _vm._v("管理者のマイページ")
+          ])
+        ],
+        1
+      ),
       _vm._v(" "),
-      _c("router-link", { attrs: { to: "/word-question-list" } }, [
-        _vm._v("問題一覧")
-      ]),
-      _vm._v(" "),
-      _vm.page === 1
-        ? _c(
-            "div",
-            [
-              _c(
-                "v-form",
-                {
-                  on: {
-                    submit: function($event) {
-                      $event.preventDefault()
-                      return _vm.editWordQuestion.apply(null, arguments)
-                    }
+      _c(
+        "li",
+        [
+          _c("router-link", { attrs: { to: "/word-question-list" } }, [
+            _vm._v("問題一覧")
+          ])
+        ],
+        1
+      )
+    ]),
+    _vm._v(" "),
+    _vm.page === 1
+      ? _c(
+          "div",
+          [
+            _c(
+              "v-form",
+              {
+                on: {
+                  submit: function($event) {
+                    $event.preventDefault()
+                    return _vm.editWordQuestion.apply(null, arguments)
                   }
-                },
-                [
-                  _c("v-text-field", {
-                    attrs: {
-                      rules: _vm.groupRules,
-                      counter: 20,
-                      label: "グループ",
-                      required: ""
+                }
+              },
+              [
+                _c("v-select", {
+                  attrs: {
+                    items: _vm.editWordQuestionForm.groupsName,
+                    label: "グループ"
+                  },
+                  model: {
+                    value: _vm.editWordQuestionForm.group,
+                    callback: function($$v) {
+                      _vm.$set(_vm.editWordQuestionForm, "group", $$v)
                     },
+                    expression: "editWordQuestionForm.group"
+                  }
+                }),
+                _vm._v(" "),
+                _c("v-text-field", {
+                  attrs: {
+                    rules: _vm.japaneseRules,
+                    counter: 20,
+                    label: "日本語",
+                    required: ""
+                  },
+                  model: {
+                    value: _vm.editWordQuestionForm.japanese,
+                    callback: function($$v) {
+                      _vm.$set(_vm.editWordQuestionForm, "japanese", $$v)
+                    },
+                    expression: "editWordQuestionForm.japanese"
+                  }
+                }),
+                _vm._v(" "),
+                _c("v-text-field", {
+                  attrs: {
+                    rules: _vm.choicesRules,
+                    counter: 30,
+                    label: "選択肢1",
+                    required: ""
+                  },
+                  model: {
+                    value: _vm.editWordQuestionForm.choice1,
+                    callback: function($$v) {
+                      _vm.$set(_vm.editWordQuestionForm, "choice1", $$v)
+                    },
+                    expression: "editWordQuestionForm.choice1"
+                  }
+                }),
+                _vm._v(" "),
+                _c("v-text-field", {
+                  attrs: {
+                    rules: _vm.choicesRules,
+                    counter: 30,
+                    label: "選択肢2",
+                    required: ""
+                  },
+                  model: {
+                    value: _vm.editWordQuestionForm.choice2,
+                    callback: function($$v) {
+                      _vm.$set(_vm.editWordQuestionForm, "choice2", $$v)
+                    },
+                    expression: "editWordQuestionForm.choice2"
+                  }
+                }),
+                _vm._v(" "),
+                _c("v-text-field", {
+                  attrs: {
+                    rules: _vm.choicesRules,
+                    counter: 30,
+                    label: "選択肢3",
+                    required: ""
+                  },
+                  model: {
+                    value: _vm.editWordQuestionForm.choice3,
+                    callback: function($$v) {
+                      _vm.$set(_vm.editWordQuestionForm, "choice3", $$v)
+                    },
+                    expression: "editWordQuestionForm.choice3"
+                  }
+                })
+              ],
+              1
+            ),
+            _vm._v(" "),
+            _c(
+              "v-container",
+              { staticClass: "px-0", attrs: { fluid: "" } },
+              [
+                _c("h5", [_vm._v("正解の選択肢")]),
+                _vm._v(" "),
+                _c(
+                  "v-radio-group",
+                  {
                     model: {
-                      value: _vm.editWordQuestionForm.group,
+                      value: _vm.editWordQuestionForm.answer,
                       callback: function($$v) {
-                        _vm.$set(_vm.editWordQuestionForm, "group", $$v)
+                        _vm.$set(_vm.editWordQuestionForm, "answer", $$v)
                       },
-                      expression: "editWordQuestionForm.group"
+                      expression: "editWordQuestionForm.answer"
                     }
+                  },
+                  _vm._l(3, function(n) {
+                    return _c("v-radio", {
+                      key: n,
+                      attrs: { label: "選択肢 " + n, value: n }
+                    })
                   }),
+                  1
+                )
+              ],
+              1
+            ),
+            _vm._v(" "),
+            _c(
+              "v-btn",
+              {
+                attrs: { type: "submit", color: "secondary" },
+                on: { click: _vm.fetch }
+              },
+              [_vm._v("編集前に戻す")]
+            ),
+            _vm._v(" "),
+            _c(
+              "v-btn",
+              {
+                attrs: { type: "submit", color: "primary" },
+                on: { click: _vm.nextPage }
+              },
+              [_vm._v("次へ")]
+            )
+          ],
+          1
+        )
+      : _c(
+          "div",
+          [
+            _vm.editErrors
+              ? _c("div", { staticClass: "errors" }, [
+                  _vm.editErrors.group
+                    ? _c(
+                        "ul",
+                        _vm._l(_vm.editErrors.group, function(msg) {
+                          return _c("li", { key: msg }, [
+                            _vm._v("\n          " + _vm._s(msg) + "\n        ")
+                          ])
+                        }),
+                        0
+                      )
+                    : _vm._e(),
                   _vm._v(" "),
-                  _c("v-text-field", {
-                    attrs: {
-                      rules: _vm.japaneseRules,
-                      counter: 20,
-                      label: "日本語",
-                      required: ""
-                    },
-                    model: {
-                      value: _vm.editWordQuestionForm.japanese,
-                      callback: function($$v) {
-                        _vm.$set(_vm.editWordQuestionForm, "japanese", $$v)
-                      },
-                      expression: "editWordQuestionForm.japanese"
-                    }
-                  }),
+                  _vm.editErrors.japanese
+                    ? _c(
+                        "ul",
+                        _vm._l(_vm.editErrors.japanese, function(msg) {
+                          return _c("li", { key: msg }, [
+                            _vm._v("\n          " + _vm._s(msg) + "\n        ")
+                          ])
+                        }),
+                        0
+                      )
+                    : _vm._e(),
                   _vm._v(" "),
-                  _c("v-text-field", {
-                    attrs: {
-                      rules: _vm.choicesRules,
-                      counter: 30,
-                      label: "選択肢1",
-                      required: ""
-                    },
-                    model: {
-                      value: _vm.editWordQuestionForm.choice1,
-                      callback: function($$v) {
-                        _vm.$set(_vm.editWordQuestionForm, "choice1", $$v)
-                      },
-                      expression: "editWordQuestionForm.choice1"
-                    }
-                  }),
+                  _vm.editErrors.choice1
+                    ? _c(
+                        "ul",
+                        _vm._l(_vm.editErrors.choice1, function(msg) {
+                          return _c("li", { key: msg }, [
+                            _vm._v("\n          " + _vm._s(msg) + "\n        ")
+                          ])
+                        }),
+                        0
+                      )
+                    : _vm._e(),
                   _vm._v(" "),
-                  _c("v-text-field", {
-                    attrs: {
-                      rules: _vm.choicesRules,
-                      counter: 30,
-                      label: "選択肢2",
-                      required: ""
-                    },
-                    model: {
-                      value: _vm.editWordQuestionForm.choice2,
-                      callback: function($$v) {
-                        _vm.$set(_vm.editWordQuestionForm, "choice2", $$v)
-                      },
-                      expression: "editWordQuestionForm.choice2"
-                    }
-                  }),
+                  _vm.editErrors.choice2
+                    ? _c(
+                        "ul",
+                        _vm._l(_vm.editErrors.choice2, function(msg) {
+                          return _c("li", { key: msg }, [
+                            _vm._v("\n          " + _vm._s(msg) + "\n        ")
+                          ])
+                        }),
+                        0
+                      )
+                    : _vm._e(),
                   _vm._v(" "),
-                  _c("v-text-field", {
-                    attrs: {
-                      rules: _vm.choicesRules,
-                      counter: 30,
-                      label: "選択肢3",
-                      required: ""
-                    },
-                    model: {
-                      value: _vm.editWordQuestionForm.choice3,
-                      callback: function($$v) {
-                        _vm.$set(_vm.editWordQuestionForm, "choice3", $$v)
-                      },
-                      expression: "editWordQuestionForm.choice3"
-                    }
-                  })
-                ],
-                1
-              ),
-              _vm._v(" "),
-              _c(
-                "v-container",
-                { staticClass: "px-0", attrs: { fluid: "" } },
-                [
-                  _c("h5", [_vm._v("正解の選択肢")]),
+                  _vm.editErrors.choice3
+                    ? _c(
+                        "ul",
+                        _vm._l(_vm.editErrors.choice3, function(msg) {
+                          return _c("li", { key: msg }, [
+                            _vm._v("\n          " + _vm._s(msg) + "\n        ")
+                          ])
+                        }),
+                        0
+                      )
+                    : _vm._e(),
                   _vm._v(" "),
-                  _c(
-                    "v-radio-group",
-                    {
-                      model: {
-                        value: _vm.editWordQuestionForm.answer,
-                        callback: function($$v) {
-                          _vm.$set(_vm.editWordQuestionForm, "answer", $$v)
-                        },
-                        expression: "editWordQuestionForm.answer"
-                      }
-                    },
-                    _vm._l(3, function(n) {
-                      return _c("v-radio", {
-                        key: n,
-                        attrs: { label: "選択肢 " + n, value: n }
-                      })
-                    }),
-                    1
-                  )
-                ],
-                1
-              ),
-              _vm._v(" "),
-              _c(
-                "v-btn",
-                {
-                  attrs: { type: "submit", color: "secondary" },
-                  on: { click: _vm.fetch }
-                },
-                [_vm._v("編集前に戻す")]
-              ),
-              _vm._v(" "),
-              _c(
-                "v-btn",
-                {
-                  attrs: { type: "submit", color: "primary" },
-                  on: { click: _vm.nextPage }
-                },
-                [_vm._v("次へ")]
-              )
-            ],
-            1
-          )
-        : _c(
-            "div",
-            [
-              _vm.editErrors
-                ? _c("div", { staticClass: "errors" }, [
-                    _vm.editErrors.group
-                      ? _c(
-                          "ul",
-                          _vm._l(_vm.editErrors.group, function(msg) {
-                            return _c("li", { key: msg }, [
-                              _vm._v(
-                                "\n          " + _vm._s(msg) + "\n        "
-                              )
-                            ])
-                          }),
-                          0
-                        )
-                      : _vm._e(),
-                    _vm._v(" "),
-                    _vm.editErrors.japanese
-                      ? _c(
-                          "ul",
-                          _vm._l(_vm.editErrors.japanese, function(msg) {
-                            return _c("li", { key: msg }, [
-                              _vm._v(
-                                "\n          " + _vm._s(msg) + "\n        "
-                              )
-                            ])
-                          }),
-                          0
-                        )
-                      : _vm._e(),
-                    _vm._v(" "),
-                    _vm.editErrors.choice1
-                      ? _c(
-                          "ul",
-                          _vm._l(_vm.editErrors.choice1, function(msg) {
-                            return _c("li", { key: msg }, [
-                              _vm._v(
-                                "\n          " + _vm._s(msg) + "\n        "
-                              )
-                            ])
-                          }),
-                          0
-                        )
-                      : _vm._e(),
-                    _vm._v(" "),
-                    _vm.editErrors.choice2
-                      ? _c(
-                          "ul",
-                          _vm._l(_vm.editErrors.choice2, function(msg) {
-                            return _c("li", { key: msg }, [
-                              _vm._v(
-                                "\n          " + _vm._s(msg) + "\n        "
-                              )
-                            ])
-                          }),
-                          0
-                        )
-                      : _vm._e(),
-                    _vm._v(" "),
-                    _vm.editErrors.choice3
-                      ? _c(
-                          "ul",
-                          _vm._l(_vm.editErrors.choice3, function(msg) {
-                            return _c("li", { key: msg }, [
-                              _vm._v(
-                                "\n          " + _vm._s(msg) + "\n        "
-                              )
-                            ])
-                          }),
-                          0
-                        )
-                      : _vm._e(),
-                    _vm._v(" "),
-                    _vm.editErrors.answer
-                      ? _c(
-                          "ul",
-                          _vm._l(_vm.editErrors.choice1, function(msg) {
-                            return _c("li", { key: msg }, [
-                              _vm._v(
-                                "\n          " + _vm._s(msg) + "\n        "
-                              )
-                            ])
-                          }),
-                          0
-                        )
-                      : _vm._e()
-                  ])
-                : _vm._e(),
-              _vm._v(" "),
-              _c(
-                "v-container",
-                [
-                  _c("dl", [
-                    _c("dt", [_vm._v("グループ")]),
-                    _vm._v(" "),
-                    _c("dd", [_vm._v(_vm._s(_vm.editWordQuestionForm.group))]),
-                    _vm._v(" "),
-                    _c("dt", [_vm._v("日本語")]),
-                    _vm._v(" "),
-                    _c("dd", [
-                      _vm._v(_vm._s(_vm.editWordQuestionForm.japanese))
-                    ]),
-                    _vm._v(" "),
-                    _c("dt", [_vm._v("選択肢1")]),
-                    _vm._v(" "),
-                    _c("dd", [
-                      _vm._v(_vm._s(_vm.editWordQuestionForm.choice1))
-                    ]),
-                    _vm._v(" "),
-                    _c("dt", [_vm._v("選択肢2")]),
-                    _vm._v(" "),
-                    _c("dd", [
-                      _vm._v(_vm._s(_vm.editWordQuestionForm.choice2))
-                    ]),
-                    _vm._v(" "),
-                    _c("dt", [_vm._v("選択肢3")]),
-                    _vm._v(" "),
-                    _c("dd", [
-                      _vm._v(_vm._s(_vm.editWordQuestionForm.choice3))
-                    ]),
-                    _vm._v(" "),
-                    _c("dt", [_vm._v("正解の選択肢")]),
-                    _vm._v(" "),
-                    _c("dd", [_vm._v(_vm._s(_vm.editWordQuestionForm.answer))])
-                  ]),
+                  _vm.editErrors.answer
+                    ? _c(
+                        "ul",
+                        _vm._l(_vm.editErrors.choice1, function(msg) {
+                          return _c("li", { key: msg }, [
+                            _vm._v("\n          " + _vm._s(msg) + "\n        ")
+                          ])
+                        }),
+                        0
+                      )
+                    : _vm._e()
+                ])
+              : _vm._e(),
+            _vm._v(" "),
+            _c(
+              "v-container",
+              [
+                _c("dl", [
+                  _c("dt", [_vm._v("グループ")]),
                   _vm._v(" "),
-                  _c(
-                    "v-btn",
-                    {
-                      attrs: { type: "submit", color: "secondary" },
-                      on: { click: _vm.prePage }
-                    },
-                    [_vm._v("戻る")]
-                  ),
+                  _c("dd", [_vm._v(_vm._s(_vm.editWordQuestionForm.group))]),
                   _vm._v(" "),
-                  _c(
-                    "v-btn",
-                    {
-                      attrs: { type: "submit", color: "primary" },
-                      on: { click: _vm.update }
-                    },
-                    [_vm._v("更新")]
-                  )
-                ],
-                1
-              )
-            ],
-            1
-          )
-    ],
-    1
-  )
+                  _c("dt", [_vm._v("日本語")]),
+                  _vm._v(" "),
+                  _c("dd", [_vm._v(_vm._s(_vm.editWordQuestionForm.japanese))]),
+                  _vm._v(" "),
+                  _c("dt", [_vm._v("選択肢1")]),
+                  _vm._v(" "),
+                  _c("dd", [_vm._v(_vm._s(_vm.editWordQuestionForm.choice1))]),
+                  _vm._v(" "),
+                  _c("dt", [_vm._v("選択肢2")]),
+                  _vm._v(" "),
+                  _c("dd", [_vm._v(_vm._s(_vm.editWordQuestionForm.choice2))]),
+                  _vm._v(" "),
+                  _c("dt", [_vm._v("選択肢3")]),
+                  _vm._v(" "),
+                  _c("dd", [_vm._v(_vm._s(_vm.editWordQuestionForm.choice3))]),
+                  _vm._v(" "),
+                  _c("dt", [_vm._v("正解の選択肢")]),
+                  _vm._v(" "),
+                  _c("dd", [_vm._v(_vm._s(_vm.editWordQuestionForm.answer))])
+                ]),
+                _vm._v(" "),
+                _c(
+                  "v-btn",
+                  {
+                    attrs: { type: "submit", color: "secondary" },
+                    on: { click: _vm.prePage }
+                  },
+                  [_vm._v("戻る")]
+                ),
+                _vm._v(" "),
+                _c(
+                  "v-btn",
+                  {
+                    attrs: { type: "submit", color: "primary" },
+                    on: { click: _vm.update }
+                  },
+                  [_vm._v("更新")]
+                )
+              ],
+              1
+            )
+          ],
+          1
+        )
+  ])
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -7118,23 +7712,43 @@ var render = function() {
   return _c(
     "div",
     [
-      _c("h1", [_vm._v("Mypage")]),
-      _vm._v(" "),
-      _c("v-btn", [_vm._v("test")]),
+      _c("h3", [_vm._v("マイページ")]),
       _vm._v(" "),
       _vm.isAdmin
-        ? _c(
-            "div",
+        ? _c("ul", [
+            _c(
+              "li",
+              [
+                _c("router-link", { attrs: { to: "/admin" } }, [
+                  _vm._v("管理者用のマイページ")
+                ])
+              ],
+              1
+            )
+          ])
+        : _vm._e(),
+      _vm._v(" "),
+      _c("p", [_vm._v("ようこそ " + _vm._s(_vm.username) + " さん")]),
+      _vm._v(" "),
+      _c("h5", [_vm._v("もんだいをとく")]),
+      _vm._v(" "),
+      _vm._l(_vm.groups, function(group) {
+        return _c("ul", { key: group.index }, [
+          _c(
+            "li",
             [
-              _c("router-link", { attrs: { to: "/admin" } }, [
-                _vm._v("管理者用のマイページへ")
-              ])
+              _c(
+                "router-link",
+                { attrs: { to: "/answer-word-question/" + group.id } },
+                [_vm._v(_vm._s(group.name))]
+              )
             ],
             1
           )
-        : _vm._e()
+        ])
+      })
     ],
-    1
+    2
   )
 }
 var staticRenderFns = []
@@ -7160,25 +7774,51 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c(
-    "div",
-    [
-      _c("h1", [_vm._v("管理者用マイページ")]),
+  return _c("div", [
+    _c("h3", [_vm._v("管理者用マイページ")]),
+    _vm._v(" "),
+    _c("ul", [
+      _c(
+        "li",
+        [
+          _c("router-link", { attrs: { to: "/" } }, [
+            _vm._v("ユーザーのマイページ")
+          ])
+        ],
+        1
+      ),
       _vm._v(" "),
-      _c("router-link", { attrs: { to: "/" } }, [
-        _vm._v("ユーザーのマイページへ")
-      ]),
+      _c(
+        "li",
+        [
+          _c("router-link", { attrs: { to: "/create-group" } }, [
+            _vm._v("グループ作成")
+          ])
+        ],
+        1
+      ),
       _vm._v(" "),
-      _c("router-link", { attrs: { to: "/create-word-question" } }, [
-        _vm._v("問題作成")
-      ]),
+      _c(
+        "li",
+        [
+          _c("router-link", { attrs: { to: "/create-word-question" } }, [
+            _vm._v("問題作成")
+          ])
+        ],
+        1
+      ),
       _vm._v(" "),
-      _c("router-link", { attrs: { to: "/word-question-list" } }, [
-        _vm._v("問題一覧")
-      ])
-    ],
-    1
-  )
+      _c(
+        "li",
+        [
+          _c("router-link", { attrs: { to: "/word-question-list" } }, [
+            _vm._v("問題一覧")
+          ])
+        ],
+        1
+      )
+    ])
+  ])
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -7204,7 +7844,19 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", [
-    _c("span", [_vm._v("問題一覧画面")]),
+    _c("h3", [_vm._v("問題一覧")]),
+    _vm._v(" "),
+    _c("ul", [
+      _c(
+        "li",
+        [
+          _c("router-link", { attrs: { to: "/admin" } }, [
+            _vm._v("管理者のマイページ")
+          ])
+        ],
+        1
+      )
+    ]),
     _vm._v(" "),
     _c(
       "div",
@@ -7255,7 +7907,9 @@ var render = function() {
                           1
                         ),
                         _vm._v(" "),
-                        _c("td", [_vm._v(_vm._s(question.group))]),
+                        _c("td", [
+                          _vm._v(_vm._s(_vm.findGroupName(question.group_id)))
+                        ]),
                         _vm._v(" "),
                         _c("td", [_vm._v(_vm._s(question.japanese))]),
                         _vm._v(" "),

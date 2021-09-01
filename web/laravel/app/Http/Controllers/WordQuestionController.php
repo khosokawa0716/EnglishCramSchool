@@ -15,15 +15,16 @@ class WordQuestionController extends Controller
      * @return void
      */
     public function create(Request $request, WordQuestion $wordQuestion ) {
+        // Log::info($request);
         $request->validate([
-            'group' => 'required|string|min:1|max:20',
+            'group_id' => 'required',
             'japanese' => 'required|string|min:1|max:20',
             'choice1' => 'required|string|min:1|max:30',
             'choice2' => 'required|string|min:1|max:30',
             'choice3' => 'required|string|min:1|max:30',
             'answer' => 'required|integer|min:1|max:3',
         ]);
-        $wordQuestion->group = $request['group'];
+        $wordQuestion->group_id = $request['group_id'];
         $wordQuestion->japanese = $request['japanese'];
         $wordQuestion->choice1 = $request['choice1'];
         $wordQuestion->choice2 = $request['choice2'];
@@ -54,12 +55,12 @@ class WordQuestionController extends Controller
 
     /**
      * グループに合った問題を取得する
-     * @param string $group
+     * @param string $group_id
      * @return Array
      */
-    public function readgroup($group)
+    public function readgroup($group_id)
     {
-        $wordQuestion = WordQuestion::where('group', $group)->get();
+        $wordQuestion = WordQuestion::where('group_id', $group_id)->get();
         // 検索結果がない場合には、エラーコード404を返却する
         if ($wordQuestion === null) { return abort(404); }
         return $wordQuestion;
@@ -87,6 +88,7 @@ class WordQuestionController extends Controller
      */
     public function update (Request $request, $id)
     {
+        // Log::info($request);
         // 1.この操作をする権限があるかどうかを確認する
         if (ctype_digit($id)) {
             $wordQuestion = WordQuestion::find($id);
@@ -98,7 +100,7 @@ class WordQuestionController extends Controller
         }
         // 1.バリデーションチェック
         $request->validate([
-            'group' => 'required|string|min:1|max:20',
+            'selected_group_id' => 'required',
             'japanese' => 'required|string|min:1|max:20',
             'choice1' => 'required|string|min:1|max:30',
             'choice2' => 'required|string|min:1|max:30',
@@ -107,7 +109,7 @@ class WordQuestionController extends Controller
         ]);
 
         // 2.変更がある項目のみセットする
-        if ( $wordQuestion->group !== $request['group'] ) { $wordQuestion->group = $request['group']; }
+        if ( $wordQuestion->group_id !== $request['selected_group_id'] ) { $wordQuestion->group_id = $request['selected_group_id']; }
         if ( $wordQuestion->japanese !== $request['japanese'] ) { $wordQuestion->japanese = $request['japanese']; }
         if ( $wordQuestion->choice1 !== $request['choice1']) { $wordQuestion->choice1 = $request['choice1']; }
         if ( $wordQuestion->choice2 !== $request['choice2']) { $wordQuestion->choice2 = $request['choice2']; }

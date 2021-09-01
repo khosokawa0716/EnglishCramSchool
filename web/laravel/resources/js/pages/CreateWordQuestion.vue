@@ -1,15 +1,16 @@
 <template>
   <div>
-    <span>問題作成画面</span>
+    <h3>問題作成</h3>
+    <ul>
+      <li><router-link to="/admin">管理者のマイページ</router-link></li>
+    </ul>
     <div v-if="page === 1">
       <v-form @submit.prevent="createWordQuestion">
-        <v-text-field
+        <v-select
           v-model="createWordQuestionForm.group"
-          :rules="groupRules"
-          :counter="20"
+          :items="createWordQuestionForm.groupsName"
           label="グループ"
-          required
-        ></v-text-field>
+        ></v-select>
         <v-text-field
           v-model="createWordQuestionForm.japanese"
           :rules="japaneseRules"
@@ -115,18 +116,17 @@ export default {
   data() {
     return {
       page: 1,
+      groupsId: [],
       createWordQuestionForm: {
         group: '',
+        // group_id: this.groupId,
+        groupsName: [],
         japanese: '',
         choice1: '',
         choice2: '',
         choice3: '',
         answer: 1,
       },
-      groupRules: [
-        (v) => !!v || 'グループは必ず入れてください',
-        (v) => v.length <= 20 || 'グループは２０もじ以下で入れてください',
-      ],
       japaneseRules: [
         (v) => !!v || '日本語は必ず入れてください',
         (v) => v.length <= 20 || '日本語は２０もじ以下で入れてください',
@@ -138,13 +138,39 @@ export default {
       registerErrors: null,
     }
   },
+  computed: {
+    groupId() {
+      const isGroup = (group) => group === this.createWordQuestionForm.group
+      console.log(isGroup)
+      const index = this.createWordQuestionForm.groupsName.findIndex(isGroup)
+      return this.groupsId[index]
+    },
+  },
   methods: {
+    async fetchGroups() {
+      const response = await axios.get(`/api/create-group`)
+      // エラーの処理
+      if (response.status !== OK) {
+        this.$store.commit('error/setCode', response.status)
+        return false
+      }
+      // 成功の場合、問題の情報をプロパティに代入
+      this.createWordQuestionForm.groupsName = response.data.map(
+        (obj) => obj.name
+      )
+      this.groupsId = response.data.map((obj) => obj.id)
+    },
     async register() {
       // 入力内容で、WordQuestionController@createを起動
       // 返却されたオブジェクトをresponseに代入
       const response = await axios.post(
         '/api/create-word-question/register',
-        this.createWordQuestionForm
+        this.createWordQuestionForm,
+        {
+          params: {
+            group_id: this.groupId,
+          },
+        }
       )
       // バリデーションエラー
       if (response.status === UNPROCESSABLE_ENTITY) {
@@ -177,6 +203,7 @@ export default {
   },
   created() {
     this.clearError()
+    this.fetchGroups()
   },
 }
 </script>
