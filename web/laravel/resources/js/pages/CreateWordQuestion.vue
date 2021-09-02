@@ -119,7 +119,6 @@ export default {
       groupsId: [],
       createWordQuestionForm: {
         group: '',
-        // group_id: this.groupId,
         groupsName: [],
         japanese: '',
         choice1: '',
@@ -141,7 +140,6 @@ export default {
   computed: {
     groupId() {
       const isGroup = (group) => group === this.createWordQuestionForm.group
-      console.log(isGroup)
       const index = this.createWordQuestionForm.groupsName.findIndex(isGroup)
       return this.groupsId[index]
     },

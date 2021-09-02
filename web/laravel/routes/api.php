@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use App\Http\Controllers\WordQuestionController;
 use App\Http\Controllers\GroupController;
+use App\Http\Controllers\HistoryController;
 
 // ユーザー
 Route::post('/register', 'Auth\RegisterController@register')->name('register');
@@ -20,3 +21,6 @@ Route::post('/create-word-question/register', [WordQuestionController::class, 'c
 // グループ
 Route::post('/create-group/register', [GroupController::class, 'create'])->name('group.create'); // グループ登録
 Route::get('/create-group', [GroupController::class, 'readall'])->name('group.readall'); // グループの全取得
+
+// 履歴
+Route::post('/answer-word-question/register', [HistoryController::class, 'create'])->name('history.create'); // 履歴登録
