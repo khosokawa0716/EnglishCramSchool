@@ -2084,6 +2084,9 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
   computed: {
     lastQuestion: function lastQuestion() {
       return this.current + 1 === this.questions.length;
+    },
+    userid: function userid() {
+      return this.$store.getters['auth/userid'];
     }
   },
   methods: {
@@ -2172,6 +2175,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       this.dialog = false;
       this.end = true;
       this.current++;
+      this.registerHistory();
     },
     findGroupName: function findGroupName(val) {
       var isGroupId = function isGroupId(group_id) {
@@ -2182,6 +2186,55 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       var index = this.groupsId.findIndex(isGroupId); // groupのidの配列からgroup_idと等しい数値のindexを探す
 
       return this.groupsName[index];
+    },
+    registerHistory: function registerHistory() {
+      var _this2 = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee2() {
+        var response;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee2$(_context2) {
+          while (1) {
+            switch (_context2.prev = _context2.next) {
+              case 0:
+                _context2.next = 2;
+                return axios.post('/api/answer-word-question/register', {
+                  user_id: _this2.userid,
+                  group_id: Number(_this2.id),
+                  number_of_correct_answers: _this2.numberOfCorrectAnswers,
+                  number_answers: _this2.questions.length
+                });
+
+              case 2:
+                response = _context2.sent;
+
+                if (!(response.status === _util__WEBPACK_IMPORTED_MODULE_1__.UNPROCESSABLE_ENTITY)) {
+                  _context2.next = 7;
+                  break;
+                }
+
+                return _context2.abrupt("return", false);
+
+              case 7:
+                if (!(response.status !== _util__WEBPACK_IMPORTED_MODULE_1__.OK)) {
+                  _context2.next = 10;
+                  break;
+                }
+
+                // その他のエラー
+                _this2.$store.commit('error/setCode', response.status);
+
+                return _context2.abrupt("return", false);
+
+              case 10:
+                _this2.$router.push('/');
+
+              case 11:
+              case "end":
+                return _context2.stop();
+            }
+          }
+        }, _callee2);
+      }))();
     }
   },
   created: function created() {
@@ -2507,7 +2560,6 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       groupsId: [],
       createWordQuestionForm: {
         group: '',
-        // group_id: this.groupId,
         groupsName: [],
         japanese: '',
         choice1: '',
@@ -2536,7 +2588,6 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         return group === _this.createWordQuestionForm.group;
       };
 
-      console.log(isGroup);
       var index = this.createWordQuestionForm.groupsName.findIndex(isGroup);
       return this.groupsId[index];
     }
@@ -3200,27 +3251,65 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
     return {
-      groups: []
+      groups: [],
+      histories: [],
+      page: 1,
+      last_page: 1
     };
   },
   computed: {
     isAdmin: function isAdmin() {
       return this.$store.getters['auth/username'] === 'admin';
     },
+    userid: function userid() {
+      return this.$store.getters['auth/userid'];
+    },
     username: function username() {
       return this.$store.getters['auth/username'];
     }
   },
   methods: {
-    fetch: function fetch() {
+    fetch: function fetch(page) {
       var _this = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee() {
-        var response, i, group;
+        var response, responseHistories, i, group, url;
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
           while (1) {
             switch (_context.prev = _context.next) {
@@ -3230,9 +3319,18 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
               case 2:
                 response = _context.sent;
+                _context.next = 5;
+                return axios.get("/api/histories/".concat(_this.userid), {
+                  params: {
+                    page: parseInt(page)
+                  }
+                });
+
+              case 5:
+                responseHistories = _context.sent;
 
                 if (!(response.status !== _util__WEBPACK_IMPORTED_MODULE_1__.OK)) {
-                  _context.next = 6;
+                  _context.next = 9;
                   break;
                 }
 
@@ -3240,7 +3338,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
                 return _context.abrupt("return", false);
 
-              case 6:
+              case 9:
                 // 成功の場合、問題の情報をプロパティに代入
                 _this.groups = [];
 
@@ -3252,17 +3350,222 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                   _this.groups.push(group);
                 }
 
-              case 8:
+                _this.histories = responseHistories.data.data;
+                _this.page = responseHistories.data.current_page;
+                _this.last_page = responseHistories.data.last_page; // URL変更
+
+                url = '/mypage?page=' + _this.page;
+                window.history.pushState(null, null, url);
+
+              case 16:
               case "end":
                 return _context.stop();
             }
           }
         }, _callee);
       }))();
+    },
+    findGroupName: function findGroupName(val) {
+      var isGroupId = function isGroupId(group_id) {
+        return group_id === val;
+      }; // 配列をチェックする関数。引数がvalと正しいかどうか
+
+
+      var groupsId = this.groups.map(function (obj) {
+        return obj.id;
+      }); // goupsからidだけを取り出して新しい配列にする
+
+      var groupsName = this.groups.map(function (obj) {
+        return obj.name;
+      }); // groupsからnameだけを取り出して新しい配列にする
+
+      var index = groupsId.findIndex(isGroupId); // groupのidの配列からgroup_idと等しい数値のindexを探す
+
+      return groupsName[index];
     }
   },
   created: function created() {
-    this.fetch();
+    this.fetch(this.page);
+  }
+});
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/pages/MypageAdmin.vue?vue&type=script&lang=js&":
+/*!*************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/pages/MypageAdmin.vue?vue&type=script&lang=js& ***!
+  \*************************************************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _util__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../util */ "./resources/js/util.js");
+
+
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  data: function data() {
+    return {
+      histories: [],
+      page: 1,
+      last_page: 1,
+      groupsId: [],
+      groupsName: [],
+      usersId: [],
+      usersName: []
+    };
+  },
+  methods: {
+    fetch: function fetch(page) {
+      var _this = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee() {
+        var response, responseGroup, responseUsers, url;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
+          while (1) {
+            switch (_context.prev = _context.next) {
+              case 0:
+                _context.next = 2;
+                return axios.get("/api/admin", {
+                  params: {
+                    page: parseInt(page)
+                  }
+                });
+
+              case 2:
+                response = _context.sent;
+                _context.next = 5;
+                return axios.get("/api/create-group");
+
+              case 5:
+                responseGroup = _context.sent;
+                _context.next = 8;
+                return axios.get("/api/users");
+
+              case 8:
+                responseUsers = _context.sent;
+
+                if (!(response.status !== _util__WEBPACK_IMPORTED_MODULE_1__.OK)) {
+                  _context.next = 12;
+                  break;
+                }
+
+                _this.$store.commit('error/setCode', response.status);
+
+                return _context.abrupt("return", false);
+
+              case 12:
+                // 成功の場合、問題の情報をプロパティに代入
+                _this.histories = response.data.data;
+                _this.page = response.data.current_page;
+                _this.last_page = response.data.last_page;
+                _this.groupsId = responseGroup.data.map(function (obj) {
+                  return obj.id;
+                }); // responseGroupからidだけを取り出して新しい配列にする
+
+                _this.groupsName = responseGroup.data.map(function (obj) {
+                  return obj.name;
+                }); // responseGroupからnameだけを取り出して新しい配列にする
+
+                _this.usersId = responseUsers.data.map(function (obj) {
+                  return obj.id;
+                }); // responseGroupからidだけを取り出して新しい配列にする
+
+                _this.usersName = responseUsers.data.map(function (obj) {
+                  return obj.name;
+                }); // responseGroupからnameだけを取り出して新しい配列にする
+                // URL変更
+
+                url = '/admin?page=' + _this.page;
+                window.history.pushState(null, null, url);
+
+              case 21:
+              case "end":
+                return _context.stop();
+            }
+          }
+        }, _callee);
+      }))();
+    },
+    findGroupName: function findGroupName(val) {
+      var isGroupId = function isGroupId(group_id) {
+        return group_id === val;
+      }; // 配列をチェックする関数。引数がvalと正しいかどうか
+
+
+      var index = this.groupsId.findIndex(isGroupId); // groupのidの配列からgroup_idと等しい数値のindexを探す
+
+      return this.groupsName[index];
+    },
+    findUserName: function findUserName(val) {
+      var isUserId = function isUserId(user_id) {
+        return user_id === val;
+      }; // 配列をチェックする関数。引数がvalと正しいかどうか
+
+
+      var index = this.usersId.findIndex(isUserId); // groupのidの配列からgroup_idと等しい数値のindexを探す
+
+      return this.usersName[index];
+    }
+  },
+  created: function created() {
+    this.fetch(this.page);
   }
 });
 
@@ -3495,7 +3798,7 @@ __webpack_require__.r(__webpack_exports__);
 vue__WEBPACK_IMPORTED_MODULE_10__.default.use(vue_router__WEBPACK_IMPORTED_MODULE_11__.default); // パスとコンポーネントのマッピング
 
 var routes = [{
-  path: '/',
+  path: '/mypage',
   component: _pages_Mypage_vue__WEBPACK_IMPORTED_MODULE_0__.default,
   beforeEnter: function beforeEnter(to, from, next) {
     if (_store__WEBPACK_IMPORTED_MODULE_9__.default.getters["auth/check"]) {
@@ -3624,6 +3927,9 @@ var getters = {
   },
   username: function username(state) {
     return state.user ? state.user.name : '';
+  },
+  userid: function userid(state) {
+    return state.user ? state.user.id : '';
   }
 };
 var mutations = {
@@ -5846,15 +6152,17 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _MypageAdmin_vue_vue_type_template_id_3177f64a___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./MypageAdmin.vue?vue&type=template&id=3177f64a& */ "./resources/js/pages/MypageAdmin.vue?vue&type=template&id=3177f64a&");
-/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! !../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+/* harmony import */ var _MypageAdmin_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./MypageAdmin.vue?vue&type=script&lang=js& */ "./resources/js/pages/MypageAdmin.vue?vue&type=script&lang=js&");
+/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! !../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
 
-var script = {}
+
+
 
 
 /* normalize component */
 ;
-var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_1__.default)(
-  script,
+var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__.default)(
+  _MypageAdmin_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__.default,
   _MypageAdmin_vue_vue_type_template_id_3177f64a___WEBPACK_IMPORTED_MODULE_0__.render,
   _MypageAdmin_vue_vue_type_template_id_3177f64a___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns,
   false,
@@ -6072,6 +6380,22 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_0_rules_0_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Mypage_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./Mypage.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/pages/Mypage.vue?vue&type=script&lang=js&");
  /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_0_rules_0_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Mypage_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__.default); 
+
+/***/ }),
+
+/***/ "./resources/js/pages/MypageAdmin.vue?vue&type=script&lang=js&":
+/*!*********************************************************************!*\
+  !*** ./resources/js/pages/MypageAdmin.vue?vue&type=script&lang=js& ***!
+  \*********************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_0_rules_0_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_MypageAdmin_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./MypageAdmin.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/pages/MypageAdmin.vue?vue&type=script&lang=js&");
+ /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_0_rules_0_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_MypageAdmin_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__.default); 
 
 /***/ }),
 
@@ -6381,7 +6705,7 @@ var render = function() {
     "v-app-bar",
     { attrs: { color: "cyan lighten-5", absolute: "" } },
     [
-      _c("RouterLink", { attrs: { to: "/" } }, [_vm._v(" 英語塾 ")]),
+      _c("RouterLink", { attrs: { to: "mypage" } }, [_vm._v(" 英語塾 ")]),
       _vm._v(" "),
       _vm.isLogin
         ? _c(
@@ -6443,7 +6767,7 @@ var render = function() {
           ? _c(
               "v-container",
               [
-                _c("h3", [_vm._v("もんだいしゅうりょう")]),
+                _c("h1", [_vm._v("もんだいしゅうりょう")]),
                 _vm._v(" "),
                 _c("p", [
                   _vm._v(
@@ -6472,7 +6796,7 @@ var render = function() {
                   [_vm._v("\n        ぜんもんせいかい、すごいね！\n      ")]
                 ),
                 _vm._v(" "),
-                _c("RouterLink", { attrs: { to: "/" } }, [
+                _c("RouterLink", { attrs: { to: "mypage" } }, [
                   _vm._v("マイページもどる")
                 ])
               ],
@@ -6481,7 +6805,7 @@ var render = function() {
           : _c(
               "v-container",
               [
-                _c("h3", [
+                _c("h1", [
                   _vm._v(
                     "にほんごに合うえいごをえらんで、「かいとう」ボタンをおしてね。"
                   )
@@ -6693,7 +7017,7 @@ var render = function() {
   return _c(
     "div",
     [
-      _c("h3", [_vm._v("グループ作成")]),
+      _c("h1", [_vm._v("グループ作成")]),
       _vm._v(" "),
       _c("ul", [
         _c(
@@ -6803,7 +7127,7 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", [
-    _c("h3", [_vm._v("問題作成")]),
+    _c("h1", [_vm._v("問題作成")]),
     _vm._v(" "),
     _c("ul", [
       _c(
@@ -6917,7 +7241,7 @@ var render = function() {
               "v-container",
               { staticClass: "px-0", attrs: { fluid: "" } },
               [
-                _c("h5", [_vm._v("正解の選択肢")]),
+                _c("h3", [_vm._v("正解の選択肢")]),
                 _vm._v(" "),
                 _c(
                   "v-radio-group",
@@ -7127,7 +7451,7 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", [
-    _c("h3", [_vm._v("問題作成")]),
+    _c("h1", [_vm._v("問題作成")]),
     _vm._v(" "),
     _c("ul", [
       _c(
@@ -7251,7 +7575,7 @@ var render = function() {
               "v-container",
               { staticClass: "px-0", attrs: { fluid: "" } },
               [
-                _c("h5", [_vm._v("正解の選択肢")]),
+                _c("h3", [_vm._v("正解の選択肢")]),
                 _vm._v(" "),
                 _c(
                   "v-radio-group",
@@ -7712,7 +8036,7 @@ var render = function() {
   return _c(
     "div",
     [
-      _c("h3", [_vm._v("マイページ")]),
+      _c("h1", [_vm._v("マイページ")]),
       _vm._v(" "),
       _vm.isAdmin
         ? _c("ul", [
@@ -7730,7 +8054,7 @@ var render = function() {
       _vm._v(" "),
       _c("p", [_vm._v("ようこそ " + _vm._s(_vm.username) + " さん")]),
       _vm._v(" "),
-      _c("h5", [_vm._v("もんだいをとく")]),
+      _c("h3", [_vm._v("もんだいをとく")]),
       _vm._v(" "),
       _vm._l(_vm.groups, function(group) {
         return _c("ul", { key: group.index }, [
@@ -7746,7 +8070,78 @@ var render = function() {
             1
           )
         ])
-      })
+      }),
+      _vm._v(" "),
+      _c(
+        "div",
+        [
+          _c("h3", [_vm._v("あしあと")]),
+          _vm._v(" "),
+          _c(
+            "v-container",
+            [
+              _c("v-simple-table", [
+                _c("thead", [
+                  _c("tr", [
+                    _c("th", [_vm._v("グループ")]),
+                    _vm._v(" "),
+                    _c("th", [_vm._v("正解した数")]),
+                    _vm._v(" "),
+                    _c("th", [_vm._v("問題の数")]),
+                    _vm._v(" "),
+                    _c("th", [_vm._v("問題を解いた日")])
+                  ])
+                ]),
+                _vm._v(" "),
+                _c(
+                  "tbody",
+                  [
+                    _vm._l(_vm.histories, function(history) {
+                      return [
+                        _c("tr", { key: history.id }, [
+                          _c("td", [
+                            _vm._v(_vm._s(_vm.findGroupName(history.group_id)))
+                          ]),
+                          _vm._v(" "),
+                          _c("td", [
+                            _vm._v(_vm._s(history.number_of_correct_answers))
+                          ]),
+                          _vm._v(" "),
+                          _c("td", [_vm._v(_vm._s(history.number_answers))]),
+                          _vm._v(" "),
+                          _c("td", [_vm._v(_vm._s(history.created_at))])
+                        ])
+                      ]
+                    })
+                  ],
+                  2
+                )
+              ]),
+              _vm._v(" "),
+              _c(
+                "div",
+                { staticClass: "text-center" },
+                [
+                  _c("v-pagination", {
+                    attrs: { length: _vm.last_page },
+                    on: { input: _vm.fetch },
+                    model: {
+                      value: _vm.page,
+                      callback: function($$v) {
+                        _vm.page = $$v
+                      },
+                      expression: "page"
+                    }
+                  })
+                ],
+                1
+              )
+            ],
+            1
+          )
+        ],
+        1
+      )
     ],
     2
   )
@@ -7775,13 +8170,13 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", [
-    _c("h3", [_vm._v("管理者用マイページ")]),
+    _c("h1", [_vm._v("管理者用マイページ")]),
     _vm._v(" "),
     _c("ul", [
       _c(
         "li",
         [
-          _c("router-link", { attrs: { to: "/" } }, [
+          _c("router-link", { attrs: { to: "mypage" } }, [
             _vm._v("ユーザーのマイページ")
           ])
         ],
@@ -7817,7 +8212,86 @@ var render = function() {
         ],
         1
       )
-    ])
+    ]),
+    _vm._v(" "),
+    _c(
+      "div",
+      [
+        _c(
+          "v-container",
+          [
+            _c("v-simple-table", [
+              _c("thead", [
+                _c("tr", [
+                  _c("th", [_vm._v("id")]),
+                  _vm._v(" "),
+                  _c("th", [_vm._v("ユーザー")]),
+                  _vm._v(" "),
+                  _c("th", [_vm._v("グループ")]),
+                  _vm._v(" "),
+                  _c("th", [_vm._v("正解した数")]),
+                  _vm._v(" "),
+                  _c("th", [_vm._v("問題の数")]),
+                  _vm._v(" "),
+                  _c("th", [_vm._v("問題を解いた日")])
+                ])
+              ]),
+              _vm._v(" "),
+              _c(
+                "tbody",
+                [
+                  _vm._l(_vm.histories, function(history) {
+                    return [
+                      _c("tr", { key: history.id }, [
+                        _c("td", [_vm._v(_vm._s(history.id))]),
+                        _vm._v(" "),
+                        _c("td", [
+                          _vm._v(_vm._s(_vm.findUserName(history.user_id)))
+                        ]),
+                        _vm._v(" "),
+                        _c("td", [
+                          _vm._v(_vm._s(_vm.findGroupName(history.group_id)))
+                        ]),
+                        _vm._v(" "),
+                        _c("td", [
+                          _vm._v(_vm._s(history.number_of_correct_answers))
+                        ]),
+                        _vm._v(" "),
+                        _c("td", [_vm._v(_vm._s(history.number_answers))]),
+                        _vm._v(" "),
+                        _c("td", [_vm._v(_vm._s(history.created_at))])
+                      ])
+                    ]
+                  })
+                ],
+                2
+              )
+            ]),
+            _vm._v(" "),
+            _c(
+              "div",
+              { staticClass: "text-center" },
+              [
+                _c("v-pagination", {
+                  attrs: { length: _vm.last_page },
+                  on: { input: _vm.fetch },
+                  model: {
+                    value: _vm.page,
+                    callback: function($$v) {
+                      _vm.page = $$v
+                    },
+                    expression: "page"
+                  }
+                })
+              ],
+              1
+            )
+          ],
+          1
+        )
+      ],
+      1
+    )
   ])
 }
 var staticRenderFns = []
@@ -7844,7 +8318,7 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", [
-    _c("h3", [_vm._v("問題一覧")]),
+    _c("h1", [_vm._v("問題一覧")]),
     _vm._v(" "),
     _c("ul", [
       _c(

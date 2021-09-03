@@ -3,7 +3,7 @@
     <span>{{ findGroupName(id) }}のもんだい</span>
     <div>
       <v-container v-if="end">
-        <h3>もんだいしゅうりょう</h3>
+        <h1>もんだいしゅうりょう</h1>
         <p>
           {{ questions.length }}もんのうち{{
             numberOfCorrectAnswers
@@ -12,10 +12,10 @@
         <p v-show="questions.length === numberOfCorrectAnswers">
           ぜんもんせいかい、すごいね！
         </p>
-        <RouterLink to="/">マイページもどる</RouterLink>
+        <RouterLink to="mypage">マイページもどる</RouterLink>
       </v-container>
       <v-container v-else>
-        <h3>にほんごに合うえいごをえらんで、「かいとう」ボタンをおしてね。</h3>
+        <h1>にほんごに合うえいごをえらんで、「かいとう」ボタンをおしてね。</h1>
         <ul v-for="(question, index) in questions" :key="question.id">
           <li v-show="index === current">
             <p>{{ questions.length }}もんのうち{{ index + 1 }}もんめ</p>
@@ -67,7 +67,7 @@
 </template>
 
 <script>
-import { OK } from '../util'
+import { OK, UNPROCESSABLE_ENTITY } from '../util'
 
 export default {
   data() {
@@ -91,6 +91,9 @@ export default {
   computed: {
     lastQuestion() {
       return this.current + 1 === this.questions.length
+    },
+    userid() {
+      return this.$store.getters['auth/userid']
     },
   },
   methods: {
@@ -139,11 +142,32 @@ export default {
       this.dialog = false
       this.end = true
       this.current++
+      this.registerHistory()
     },
     findGroupName(val) {
       const isGroupId = (group_id) => group_id === Number(val) // 配列をチェックする関数。引数がvalと正しいかどうか
       const index = this.groupsId.findIndex(isGroupId) // groupのidの配列からgroup_idと等しい数値のindexを探す
       return this.groupsName[index]
+    },
+    async registerHistory() {
+      // 入力内容で、HistoryController@createを起動
+      // 返却されたオブジェクトをresponseに代入
+      const response = await axios.post('/api/answer-word-question/register', {
+        user_id: this.userid,
+        group_id: Number(this.id),
+        number_of_correct_answers: this.numberOfCorrectAnswers,
+        number_answers: this.questions.length,
+      })
+      // バリデーションエラー
+      if (response.status === UNPROCESSABLE_ENTITY) {
+        // this.registerErrors = response.data.errors
+        return false
+      } else if (response.status !== OK) {
+        // その他のエラー
+        this.$store.commit('error/setCode', response.status)
+        return false
+      }
+      this.$router.push('/')
     },
   },
   created() {

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h3>グループ作成</h3>
+    <h1>グループ作成</h1>
     <ul>
       <li><router-link to="/admin">管理者のマイページ</router-link></li>
     </ul>
