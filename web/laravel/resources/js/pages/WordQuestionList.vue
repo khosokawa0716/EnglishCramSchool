@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h3>問題一覧</h3>
+    <h1>問題一覧</h1>
     <ul>
       <li><router-link to="/admin">管理者のマイページ</router-link></li>
     </ul>

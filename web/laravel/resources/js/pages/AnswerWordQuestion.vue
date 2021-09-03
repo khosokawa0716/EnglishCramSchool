@@ -3,7 +3,7 @@
     <span>{{ findGroupName(id) }}のもんだい</span>
     <div>
       <v-container v-if="end">
-        <h3>もんだいしゅうりょう</h3>
+        <h1>もんだいしゅうりょう</h1>
         <p>
           {{ questions.length }}もんのうち{{
             numberOfCorrectAnswers
@@ -12,10 +12,10 @@
         <p v-show="questions.length === numberOfCorrectAnswers">
           ぜんもんせいかい、すごいね！
         </p>
-        <RouterLink to="/">マイページもどる</RouterLink>
+        <RouterLink to="mypage">マイページもどる</RouterLink>
       </v-container>
       <v-container v-else>
-        <h3>にほんごに合うえいごをえらんで、「かいとう」ボタンをおしてね。</h3>
+        <h1>にほんごに合うえいごをえらんで、「かいとう」ボタンをおしてね。</h1>
         <ul v-for="(question, index) in questions" :key="question.id">
           <li v-show="index === current">
             <p>{{ questions.length }}もんのうち{{ index + 1 }}もんめ</p>

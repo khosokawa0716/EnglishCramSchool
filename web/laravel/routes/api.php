@@ -4,12 +4,14 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\WordQuestionController;
 use App\Http\Controllers\GroupController;
 use App\Http\Controllers\HistoryController;
+use App\Models\User;
 
 // ユーザー
 Route::post('/register', 'Auth\RegisterController@register')->name('register');
 Route::post('/login', 'Auth\LoginController@login')->name('login');
 Route::post('/logout', 'Auth\LoginController@logout')->name('logout');
 Route::get('/user', function () { return Auth::user(); })->name('user'); // ログインユーザーの返却
+Route::get('/users', function () { return User::get(); })->name('users'); // ログインユーザーの返却
 
 // 問題
 Route::put('/edit-word-question/{id}', [WordQuestionController::class, 'update'])->name('wordQuestion.update'); // 単語問題編集画面の表示
@@ -24,3 +26,5 @@ Route::get('/create-group', [GroupController::class, 'readall'])->name('group.re
 
 // 履歴
 Route::post('/answer-word-question/register', [HistoryController::class, 'create'])->name('history.create'); // 履歴登録
+Route::get('/admin', [HistoryController::class, 'readall'])->name('history.readall'); // 履歴の全取得
+Route::get('/histories/{id}', [HistoryController::class, 'readuser'])->name('history.readuser'); // ユーザー履歴の取得

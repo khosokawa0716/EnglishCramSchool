@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h3>問題作成</h3>
+    <h1>問題作成</h1>
     <ul>
       <li><router-link to="/admin">管理者のマイページ</router-link></li>
     </ul>
@@ -41,7 +41,7 @@
         ></v-text-field>
       </v-form>
       <v-container class="px-0" fluid>
-        <h5>正解の選択肢</h5>
+        <h3>正解の選択肢</h3>
         <v-radio-group v-model="createWordQuestionForm.answer">
           <v-radio
             v-for="n in 3"

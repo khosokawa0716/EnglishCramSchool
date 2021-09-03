@@ -15,7 +15,7 @@ class HistoryController extends Controller
      * @return void
      */
     public function create(Request $request, History $history ) {
-        Log::info($request);
+        // Log::info($request);
         $request->validate([
             'user_id' => 'required',
             'group_id' => 'required',
@@ -28,5 +28,33 @@ class HistoryController extends Controller
         $history->number_answers = $request['number_answers'];
 
         $history->save();
+    }
+
+    /**
+     * 履歴を全て取得する
+     * @param null
+     * @return Array
+     */
+    public function readall()
+    {
+        $histories = History::orderBy(History::CREATED_AT, 'desc')->paginate(3);
+        // 検索結果がない場合には、エラーコード404を返却する
+        if ($histories === null) { return abort(404); }
+        return $histories;
+    }
+
+    /**
+     * user_idに合った問題を取得する
+     * @param string $user_id
+     * @return Array
+     */
+    public function readuser($user_id)
+    {
+        $histories = History::where('user_id', $user_id)
+            ->orderBy(History::CREATED_AT, 'desc')
+            ->paginate(3);
+        // 検索結果がない場合には、エラーコード404を返却する
+        if ($histories === null) { return abort(404); }
+        return $histories;
     }
 }

@@ -19,7 +19,7 @@ Vue.use(VueRouter)
 // パスとコンポーネントのマッピング
 const routes = [
   {
-    path: '/',
+    path: '/mypage',
     component: Mypage,
     beforeEnter(to, from, next) {
       if (store.getters['auth/check']) {
